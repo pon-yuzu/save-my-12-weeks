@@ -115,4 +115,12 @@ return [
         'name' => env('MAIL_FROM_NAME', 'Example'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Admin Notification Email
+    |--------------------------------------------------------------------------
+    */
+
+    'admin_notification_to' => env('MAIL_ADMIN_TO', 'ponglish.yukarizu@gmail.com'),
+
 ];
