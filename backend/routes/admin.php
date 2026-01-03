@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DiagnosisController;
+use App\Http\Controllers\Admin\InvitationController;
 use App\Http\Controllers\Admin\MailTemplateController;
 use App\Http\Controllers\Admin\SeminarApplicationController;
 use App\Http\Controllers\Admin\SeminarSettingController;
@@ -10,9 +11,13 @@ use App\Http\Controllers\Admin\SubscriberController;
 use App\Http\Controllers\Admin\UnsubscribeReasonController;
 use Illuminate\Support\Facades\Route;
 
-// 認証
+// 認証（ゲスト）
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('admin.login');
 Route::post('/login', [AuthController::class, 'login']);
+
+// 招待リンクからの登録（ゲスト）
+Route::get('/register/{token}', [AuthController::class, 'showRegisterForm'])->name('admin.register.form');
+Route::post('/register/{token}', [AuthController::class, 'register'])->name('admin.register');
 
 // 認証必須
 Route::middleware('admin')->group(function () {
@@ -43,4 +48,14 @@ Route::middleware('admin')->group(function () {
 
     // 配信停止理由
     Route::get('/unsubscribe-reasons', [UnsubscribeReasonController::class, 'index'])->name('admin.unsubscribe-reasons.index');
+
+    // 管理者専用機能
+    Route::middleware(\App\Http\Middleware\AdminOnly::class)->group(function () {
+        // 招待管理
+        Route::get('/invitations', [InvitationController::class, 'index'])->name('admin.invitations.index');
+        Route::get('/invitations/create', [InvitationController::class, 'create'])->name('admin.invitations.create');
+        Route::post('/invitations', [InvitationController::class, 'store'])->name('admin.invitations.store');
+        Route::get('/invitations/{invitation}', [InvitationController::class, 'show'])->name('admin.invitations.show');
+        Route::delete('/invitations/{invitation}', [InvitationController::class, 'destroy'])->name('admin.invitations.destroy');
+    });
 });

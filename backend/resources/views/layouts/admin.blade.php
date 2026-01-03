@@ -406,6 +406,14 @@
             <div class="admin-sidebar-header">
                 <h1>SAVE MY 12 WEEKS</h1>
                 <span>管理画面</span>
+                @if(auth('admin')->check())
+                <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--admin-border);">
+                    <span style="font-size: 0.8rem; color: var(--foreground-muted);">{{ auth('admin')->user()->name }}</span>
+                    <span style="display: inline-block; padding: 2px 8px; font-size: 0.7rem; background: rgba(255,107,53,0.1); color: var(--color-orange); margin-left: 4px;">
+                        {{ auth('admin')->user()->role_label }}
+                    </span>
+                </div>
+                @endif
             </div>
             <nav class="admin-nav">
                 <a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
@@ -436,6 +444,12 @@
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path></svg>
                     配信停止理由
                 </a>
+                @if(auth('admin')->check() && auth('admin')->user()->isAdmin())
+                <a href="{{ route('admin.invitations.index') }}" class="{{ request()->routeIs('admin.invitations.*') ? 'active' : '' }}">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path></svg>
+                    招待管理
+                </a>
+                @endif
                 <form action="{{ route('admin.logout') }}" method="POST">
                     @csrf
                     <button type="submit" class="logout-btn">ログアウト</button>
