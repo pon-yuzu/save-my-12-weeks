@@ -28,13 +28,15 @@ class MailSubscription extends Model
 
     /**
      * 配信時間の選択肢
+     * ※ routes/console.php のスケジュールと同期すること
      */
     public const PREFERRED_TIMES = [
         '06:00' => '朝6時（早起き派）',
+        '07:00' => '朝7時（朝活派）',
         '08:00' => '朝8時（通勤前）',
         '12:00' => 'お昼12時（ランチタイム）',
         '18:00' => '夕方6時（仕事終わり）',
-        '21:00' => '夜9時（寝る前）',
+        '20:00' => '夜8時（寝る前）',
     ];
 
     public const DEFAULT_PREFERRED_TIME = '08:00';

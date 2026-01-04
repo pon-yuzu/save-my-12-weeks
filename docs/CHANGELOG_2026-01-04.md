@@ -61,9 +61,12 @@
 登録者が好みの配信時間を選択できる機能。配信時間選択はDay 0メールとして分離。
 
 **選択肢:**
-- 朝 (8:00)
-- 昼 (12:00)
-- 夜 (20:00)
+- 朝6時（早起き派）
+- 朝7時（朝活派）
+- 朝8時（通勤前）
+- お昼12時（ランチタイム）
+- 夕方6時（仕事終わり）
+- 夜8時（寝る前）
 
 **変更ファイル:**
 - `backend/app/Models/MailSubscription.php` - `preferred_time`カラム追加
@@ -93,7 +96,7 @@
 
 **変更ファイル:**
 - `backend/resources/js/components/DiagnosisApp.tsx` - Intro1にニックネーム入力追加
-- `backend/app/Models/DiagnosisResult.php` - `nickname`カラム
+- `backend/app/Models/MailSubscription.php` - `nickname`カラム追加
 
 ---
 
@@ -187,26 +190,30 @@ php artisan migrate
 - `broadcast_recipients` - 配信先・開封状況
 
 **カラム追加:**
-- `mail_logs.opened_at` - 開封日時
+- `mail_deliveries.opened_at` - 開封日時
 - `mail_subscriptions.preferred_time` - 希望配信時間
-- `diagnosis_results.nickname` - ニックネーム
+- `mail_subscriptions.nickname` - ニックネーム
+- `mail_subscriptions.settings_token` - 設定ページ用トークン
 - `diagnosis_results.wheel_image_path` - ホイール画像パス
 
 ---
 
 ## スケジュールタスク
 
-cronが設定されている前提で、以下のコマンドが毎分実行されます:
+cronが設定されている前提で、以下のコマンドが実行されます:
 
 ```php
 // backend/routes/console.php
 
-// 30日講座の配信
-Schedule::command('mail:send-daily-course')
-    ->dailyAt('08:00')
-    ->timezone('Asia/Tokyo');
+// 30日講座の配信（時間帯別）
+$deliveryTimes = ['06:00', '07:00', '08:00', '12:00', '18:00', '20:00'];
+foreach ($deliveryTimes as $time) {
+    Schedule::command("newsletter:send-daily --time={$time}")
+        ->dailyAt($time)
+        ->timezone('Asia/Tokyo');
+}
 
-// 予約ブロードキャストの配信
+// 予約ブロードキャストの配信（毎分）
 Schedule::command('broadcasts:send-scheduled')
     ->everyMinute()
     ->timezone('Asia/Tokyo')
