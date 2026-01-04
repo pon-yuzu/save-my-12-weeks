@@ -20,7 +20,7 @@ class MailTemplate extends Model
     protected function casts(): array
     {
         return [
-            'day_number' => 'integer',
+            'day_number' => 'float',
             'is_active' => 'boolean',
         ];
     }
