@@ -65,14 +65,14 @@ class MailTemplateSeeder extends Seeder
                 if (preg_match('/```\n(.*?)\n```/s', $dayContent, $codeMatch)) {
                     $emailText = $codeMatch[1];
 
-                    // 件名を抽出
+                    // 件名を抽出（uフラグでUTF-8モード）
                     $subject = '';
-                    if (preg_match('/^件名[：:]\s*(.+)$/m', $emailText, $subjectMatch)) {
+                    if (preg_match('/^件名[：:]\s*(.+)$/mu', $emailText, $subjectMatch)) {
                         $subject = trim($subjectMatch[1]);
                     }
 
                     // 本文を抽出（件名の次の行から）
-                    $body = preg_replace('/^件名[：:].*\n\n?/m', '', $emailText);
+                    $body = preg_replace('/^件名[：:].*\n\n?/mu', '', $emailText);
                     $body = trim($body);
 
                     // Day番号を整数または小数で保存（14.5など）
