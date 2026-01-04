@@ -34,10 +34,18 @@ function SwipeHint({ text = "swipe" }: { text?: string }) {
   );
 }
 
-// 【1】導入① - ファーストビュー
-function Intro1() {
+// 【1】導入① - ファーストビュー（名前入力付き）
+function Intro1({
+  name,
+  onNameChange,
+  onStart,
+}: {
+  name: string;
+  onNameChange: (name: string) => void;
+  onStart: () => void;
+}) {
   return (
-    <div className="slide-content">
+    <div className="slide-content items-center text-center swiper-no-swiping">
       <p className="text-xs font-display-en uppercase tracking-[0.3em] text-[#0d7377] mb-8 animate-fade-in-up">
         Save My 12 Weeks
       </p>
@@ -56,13 +64,32 @@ function Intro1() {
         実際に使われている診断ツール。
       </p>
 
-      <p className="text-[#2d2d2d] text-sm leading-[2] animate-fade-in-up animate-delay-4">
+      <p className="text-[#2d2d2d] text-sm leading-[2] mb-8 animate-fade-in-up animate-delay-4">
         人生を8つの領域に分けて、
         <br />
         今の自分の「現在地」を見える化する。
       </p>
 
-      <SwipeHint />
+      <div className="w-full max-w-xs animate-fade-in-up animate-delay-5">
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => onNameChange(e.target.value)}
+          placeholder="お名前（ニックネームOK）"
+          className="styled-input w-full text-center"
+          maxLength={20}
+        />
+      </div>
+
+      <div className="h-6" />
+
+      <button
+        onClick={onStart}
+        disabled={!name.trim()}
+        className={`cta-button ${!name.trim() ? "opacity-50 cursor-not-allowed" : "animate-pulse-subtle"}`}
+      >
+        始める
+      </button>
     </div>
   );
 }
@@ -106,60 +133,6 @@ function Intro2() {
       </div>
 
       <SwipeHint text="start" />
-    </div>
-  );
-}
-
-// 【3】ニックネーム入力
-function NicknameInput({
-  nickname,
-  onNicknameChange,
-  onNext,
-}: {
-  nickname: string;
-  onNicknameChange: (name: string) => void;
-  onNext: () => void;
-}) {
-  const isValid = nickname.trim().length > 0;
-
-  return (
-    <div className="slide-content items-center text-center swiper-no-swiping">
-      <p className="text-xs font-display-en uppercase tracking-[0.3em] text-[#0d7377] mb-8 animate-fade-in-up">
-        Nice to meet you
-      </p>
-
-      <h2 className="heading-lg mb-6 animate-fade-in-up animate-delay-1">
-        なんて<span className="text-[#0d7377]">呼んだらいい</span>？
-      </h2>
-
-      <p className="text-[#6b6b6b] text-sm leading-[2] mb-8 animate-fade-in-up animate-delay-2">
-        ニックネームでも、本名でも、
-        <br />
-        呼ばれたい名前を教えてね。
-      </p>
-
-      <div className="w-full max-w-xs animate-fade-in-up animate-delay-3">
-        <input
-          type="text"
-          value={nickname}
-          onChange={(e) => onNicknameChange(e.target.value)}
-          placeholder="例：さやか"
-          className="styled-input w-full text-center"
-          maxLength={20}
-        />
-      </div>
-
-      <p className="text-xs text-[#9a9a9a] mt-4 mb-8 animate-fade-in-up animate-delay-4">
-        メールでこの名前で呼びかけます
-      </p>
-
-      <button
-        onClick={onNext}
-        disabled={!isValid}
-        className="cta-button animate-fade-in-up animate-delay-5 disabled:opacity-40 disabled:cursor-not-allowed"
-      >
-        はじめる
-      </button>
     </div>
   );
 }
@@ -432,7 +405,7 @@ function Complete({ onShowResult }: { onShowResult: () => void }) {
         見える化されます。
       </p>
 
-      <button onClick={onShowResult} className="cta-button animate-fade-in-up animate-delay-3">
+      <button onClick={onShowResult} className="cta-button animate-fade-in-up animate-delay-3 animate-pulse-subtle">
         結果を見る
       </button>
     </div>
@@ -440,7 +413,7 @@ function Complete({ onShowResult }: { onShowResult: () => void }) {
 }
 
 // 【16】結果（ホイール）
-function ResultWheel({ scores }: { scores: number[] }) {
+function ResultWheel({ scores, onNext }: { scores: number[]; onNext: () => void }) {
   const centerRadius = 22;
   const minRadius = 38;
   const maxRadius = 130;
@@ -561,7 +534,11 @@ function ResultWheel({ scores }: { scores: number[] }) {
         ))}
       </div>
 
-      <SwipeHint />
+      <div className="h-4" />
+
+      <button onClick={onNext} className="cta-button animate-pulse-subtle">
+        12週間あったら、どこ変える？→
+      </button>
     </div>
   );
 }
@@ -596,11 +573,13 @@ function AdditionalQuestion({
   onToggleArea,
   freeText,
   onFreeTextChange,
+  onBack,
 }: {
   selectedAreas: string[];
   onToggleArea: (id: string) => void;
   freeText: string;
   onFreeTextChange: (text: string) => void;
+  onBack: () => void;
 }) {
   return (
     <div className="slide-content items-center text-center">
@@ -637,6 +616,12 @@ function AdditionalQuestion({
           placeholder="例：週3でジムに通いたい..."
           className="styled-textarea"
         />
+      </div>
+
+      <div className="flex items-center justify-center gap-4 mt-8 w-full max-w-xs animate-fade-in-up animate-delay-4">
+        <button onClick={onBack} className="text-sm text-[#9a9a9a] hover:text-[#0d7377] transition-colors">
+          ← 結果を見返す
+        </button>
       </div>
 
       <SwipeHint />
@@ -881,7 +866,7 @@ export default function DiagnosisApp() {
   const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
   const [currentSlide, setCurrentSlide] = useState(1);
   const [resultShown, setResultShown] = useState(false);
-  const totalSlides = 22; // ニックネーム入力スライドを追加
+  const totalSlides = 21; // ニックネーム入力をIntro1に統合
 
   // メルマガ登録用ステート
   const [email, setEmail] = useState("");
@@ -914,11 +899,26 @@ export default function DiagnosisApp() {
     }
   }, [swiperInstance]);
 
-  const handleNicknameNext = useCallback(() => {
+  // Intro1で「始める」を押した時
+  const handleStart = useCallback(() => {
     if (nickname.trim() && swiperInstance) {
       swiperInstance.slideNext();
     }
   }, [nickname, swiperInstance]);
+
+  // ResultWheelで「12週間あったら〜」ボタンを押した時
+  const handleResultNext = useCallback(() => {
+    if (swiperInstance) {
+      swiperInstance.slideNext();
+    }
+  }, [swiperInstance]);
+
+  // AdditionalQuestionで「← 結果を見返す」ボタンを押した時
+  const handleBackToResult = useCallback(() => {
+    if (swiperInstance) {
+      swiperInstance.slideTo(16); // ResultWheelのインデックス
+    }
+  }, [swiperInstance]);
 
   // 診断結果を保存してからメルマガ登録
   const handleNewsletterSubmit = useCallback(async () => {
@@ -1081,19 +1081,18 @@ export default function DiagnosisApp() {
         onSwiper={setSwiperInstance}
         onSlideChange={(swiper) => {
           setCurrentSlide(swiper.activeIndex + 1);
-          // 結果表示後は、ResultWheel（スライド18、index 17）より前には戻れない
-          if (resultShown && swiper.activeIndex < 17) {
-            swiper.slideTo(17);
+          // 結果表示後は、ResultWheel（スライド17、index 16）より前には戻れない
+          if (resultShown && swiper.activeIndex < 16) {
+            swiper.slideTo(16);
           }
-          // 登録完了後は、完了画面（スライド22、index 21）から戻れない
-          if (isRegistered && swiper.activeIndex < 21) {
-            swiper.slideTo(21);
+          // 登録完了後は、完了画面（スライド21、index 20）から戻れない
+          if (isRegistered && swiper.activeIndex < 20) {
+            swiper.slideTo(20);
           }
         }}
       >
-        <SwiperSlide><Intro1 /></SwiperSlide>
+        <SwiperSlide><Intro1 name={nickname} onNameChange={setNickname} onStart={handleStart} /></SwiperSlide>
         <SwiperSlide><Intro2 /></SwiperSlide>
-        <SwiperSlide><NicknameInput nickname={nickname} onNicknameChange={setNickname} onNext={handleNicknameNext} /></SwiperSlide>
         <SwiperSlide><QuestionSlide category={categories[0]} questionNumber={1} score={scores[0]} onScoreChange={(v) => handleScoreChange(0, v)} /></SwiperSlide>
         <SwiperSlide><QuestionSlide category={categories[1]} questionNumber={2} score={scores[1]} onScoreChange={(v) => handleScoreChange(1, v)} /></SwiperSlide>
         <SwiperSlide><CoachInfo1 /></SwiperSlide>
@@ -1108,9 +1107,9 @@ export default function DiagnosisApp() {
         <SwiperSlide><QuestionSlide category={categories[6]} questionNumber={7} score={scores[6]} onScoreChange={(v) => handleScoreChange(6, v)} /></SwiperSlide>
         <SwiperSlide><QuestionSlide category={categories[7]} questionNumber={8} score={scores[7]} onScoreChange={(v) => handleScoreChange(7, v)} /></SwiperSlide>
         <SwiperSlide><Complete onShowResult={handleShowResult} /></SwiperSlide>
-        <SwiperSlide><ResultWheel scores={scores} /></SwiperSlide>
+        <SwiperSlide><ResultWheel scores={scores} onNext={handleResultNext} /></SwiperSlide>
         <SwiperSlide><ResultMessage /></SwiperSlide>
-        <SwiperSlide><AdditionalQuestion selectedAreas={selectedAreas} onToggleArea={handleToggleArea} freeText={freeText} onFreeTextChange={setFreeText} /></SwiperSlide>
+        <SwiperSlide><AdditionalQuestion selectedAreas={selectedAreas} onToggleArea={handleToggleArea} freeText={freeText} onFreeTextChange={setFreeText} onBack={handleBackToResult} /></SwiperSlide>
         <SwiperSlide>
           <NewsletterSignup
             email={email}
