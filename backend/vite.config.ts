@@ -9,7 +9,11 @@ export default defineConfig({
       devTarget: 'es2022',
     }),
     laravel({
-      input: ['resources/css/app.css', 'resources/js/app.tsx'],
+      input: [
+        'resources/css/app.css',
+        'resources/js/app.tsx',
+        'resources/js/admin-calendar.js',
+      ],
       refresh: true,
     }),
     tailwindcss(),

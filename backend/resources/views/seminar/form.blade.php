@@ -8,6 +8,25 @@
     <h1 class="form-heading">セミナー申込フォーム</h1>
     <p class="form-subheading">以下の項目をご記入ください</p>
 
+    @if($seminar)
+    <div class="seminar-info-card">
+        <div class="seminar-date">
+            <span class="seminar-label">開催日時</span>
+            <span class="seminar-value">{{ $seminar->formatted_schedule }}</span>
+        </div>
+        <div class="seminar-method">
+            <span class="seminar-label">開催方法</span>
+            <span class="seminar-value">オンライン（Zoom）</span>
+        </div>
+        @if($seminar->capacity && !$seminar->is_full)
+        <div class="seminar-capacity">
+            <span class="seminar-label">残り</span>
+            <span class="seminar-value">{{ $seminar->capacity - $seminar->applications_count }}名</span>
+        </div>
+        @endif
+    </div>
+    @endif
+
     @if ($errors->any())
     <div class="alert-error">
         <ul>

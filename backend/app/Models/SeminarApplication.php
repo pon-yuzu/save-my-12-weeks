@@ -4,12 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class SeminarApplication extends Model
 {
     use HasFactory;
 
     protected $fillable = [
+        'seminar_id',
         'name',
         'email',
         'age_group',
@@ -21,7 +23,21 @@ class SeminarApplication extends Model
         'cancel_reason',
         'twelve_weeks_dream',
         'questions',
+        'reminder_1day_sent_at',
+        'reminder_1hour_sent_at',
+        'followup_sent_at',
     ];
+
+    protected $casts = [
+        'reminder_1day_sent_at' => 'datetime',
+        'reminder_1hour_sent_at' => 'datetime',
+        'followup_sent_at' => 'datetime',
+    ];
+
+    public function seminar(): BelongsTo
+    {
+        return $this->belongsTo(Seminar::class);
+    }
 
     public const AGE_GROUPS = [
         '20s' => '20代',

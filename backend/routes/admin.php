@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\InvitationController;
 use App\Http\Controllers\Admin\MailTemplateController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\SeminarApplicationController;
+use App\Http\Controllers\Admin\SeminarController;
 use App\Http\Controllers\Admin\SeminarSettingController;
 use App\Http\Controllers\Admin\SubscriberController;
 use App\Http\Controllers\Admin\UnsubscribeReasonController;
@@ -47,14 +48,18 @@ Route::middleware('admin')->group(function () {
     Route::get('/broadcasts/preview', [BroadcastController::class, 'preview'])->name('admin.broadcasts.preview');
     Route::resource('broadcasts', BroadcastController::class)->names('admin.broadcasts');
 
+    // セミナー日程管理（カレンダー）
+    Route::get('/seminars', [SeminarController::class, 'index'])->name('admin.seminars.index');
+    Route::get('/seminars/events', [SeminarController::class, 'events'])->name('admin.seminars.events');
+    Route::post('/seminars', [SeminarController::class, 'store'])->name('admin.seminars.store');
+    Route::get('/seminars/{seminar}', [SeminarController::class, 'show'])->name('admin.seminars.show');
+    Route::put('/seminars/{seminar}', [SeminarController::class, 'update'])->name('admin.seminars.update');
+    Route::delete('/seminars/{seminar}', [SeminarController::class, 'destroy'])->name('admin.seminars.destroy');
+
     // セミナー申込
     Route::get('/seminar-applications', [SeminarApplicationController::class, 'index'])->name('admin.seminar-applications.index');
     Route::get('/seminar-applications/{seminarApplication}', [SeminarApplicationController::class, 'show'])->name('admin.seminar-applications.show');
     Route::delete('/seminar-applications/{seminarApplication}', [SeminarApplicationController::class, 'destroy'])->name('admin.seminar-applications.destroy');
-
-    // セミナー設定
-    Route::get('/seminar-settings', [SeminarSettingController::class, 'edit'])->name('admin.seminar-settings.edit');
-    Route::put('/seminar-settings', [SeminarSettingController::class, 'update'])->name('admin.seminar-settings.update');
 
     // 配信停止理由
     Route::get('/unsubscribe-reasons', [UnsubscribeReasonController::class, 'index'])->name('admin.unsubscribe-reasons.index');

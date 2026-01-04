@@ -170,6 +170,37 @@
             margin: 0;
             padding-left: 20px;
         }
+
+        /* セミナー情報カード */
+        .seminar-info-card {
+            background: rgba(13, 115, 119, 0.08);
+            border: 1px solid rgba(13, 115, 119, 0.2);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 24px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .seminar-info-card > div {
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .seminar-label {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--foreground-light);
+            margin-bottom: 4px;
+        }
+
+        .seminar-value {
+            display: block;
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--color-teal);
+        }
     </style>
 </head>
 <body>
