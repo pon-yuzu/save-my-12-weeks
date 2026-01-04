@@ -110,6 +110,50 @@ function Intro2() {
   );
 }
 
+// 【3】ニックネーム入力
+function NicknameInput({
+  nickname,
+  onNicknameChange,
+}: {
+  nickname: string;
+  onNicknameChange: (name: string) => void;
+}) {
+  return (
+    <div className="slide-content items-center text-center">
+      <p className="text-xs font-display-en uppercase tracking-[0.3em] text-[#0d7377] mb-8 animate-fade-in-up">
+        Nice to meet you
+      </p>
+
+      <h2 className="heading-lg mb-6 animate-fade-in-up animate-delay-1">
+        なんて<span className="text-[#0d7377]">呼んだらいい</span>？
+      </h2>
+
+      <p className="text-[#6b6b6b] text-sm leading-[2] mb-8 animate-fade-in-up animate-delay-2">
+        ニックネームでも、本名でも、
+        <br />
+        呼ばれたい名前を教えてね。
+      </p>
+
+      <div className="w-full max-w-xs animate-fade-in-up animate-delay-3">
+        <input
+          type="text"
+          value={nickname}
+          onChange={(e) => onNicknameChange(e.target.value)}
+          placeholder="例：さやか"
+          className="styled-input w-full text-center"
+          maxLength={20}
+        />
+      </div>
+
+      <p className="text-xs text-[#9a9a9a] mt-4 animate-fade-in-up animate-delay-4">
+        メールでこの名前で呼びかけます
+      </p>
+
+      <SwipeHint />
+    </div>
+  );
+}
+
 // 質問スライド
 function QuestionSlide({
   category,
@@ -823,10 +867,11 @@ export default function DiagnosisApp() {
   const [scores, setScores] = useState<number[]>([5, 5, 5, 5, 5, 5, 5, 5]);
   const [selectedAreas, setSelectedAreas] = useState<string[]>([]);
   const [freeText, setFreeText] = useState("");
+  const [nickname, setNickname] = useState("");
   const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
   const [currentSlide, setCurrentSlide] = useState(1);
   const [resultShown, setResultShown] = useState(false);
-  const totalSlides = 21;
+  const totalSlides = 22; // ニックネーム入力スライドを追加
 
   // メルマガ登録用ステート
   const [email, setEmail] = useState("");
@@ -904,6 +949,7 @@ export default function DiagnosisApp() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           email,
+          nickname: nickname || null,
           diagnosis_id: currentDiagnosisId,
         }),
       });
@@ -923,7 +969,7 @@ export default function DiagnosisApp() {
     } finally {
       setIsSubmitting(false);
     }
-  }, [email, isSubmitting, diagnosisId, scores, selectedAreas, freeText, swiperInstance]);
+  }, [email, isSubmitting, diagnosisId, scores, selectedAreas, freeText, nickname, swiperInstance]);
 
   // ホイール描画用の定数と関数（画像生成用）
   const centerRadius = 22;
@@ -1010,7 +1056,7 @@ export default function DiagnosisApp() {
         speed={500}
         spaceBetween={0}
         slidesPerView={1}
-        noSwipingSelector="input[type='range'], input[type='email'], select, textarea"
+        noSwipingSelector="input[type='range'], input[type='email'], input[type='text'], select, textarea"
         touchStartPreventDefault={false}
         resistanceRatio={0}
         touchReleaseOnEdges={false}
@@ -1018,18 +1064,19 @@ export default function DiagnosisApp() {
         onSwiper={setSwiperInstance}
         onSlideChange={(swiper) => {
           setCurrentSlide(swiper.activeIndex + 1);
-          // 結果表示後は、ResultWheel（スライド17、index 16）より前には戻れない
-          if (resultShown && swiper.activeIndex < 16) {
-            swiper.slideTo(16);
+          // 結果表示後は、ResultWheel（スライド18、index 17）より前には戻れない
+          if (resultShown && swiper.activeIndex < 17) {
+            swiper.slideTo(17);
           }
-          // 登録完了後は、完了画面（スライド21、index 20）から戻れない
-          if (isRegistered && swiper.activeIndex < 20) {
-            swiper.slideTo(20);
+          // 登録完了後は、完了画面（スライド22、index 21）から戻れない
+          if (isRegistered && swiper.activeIndex < 21) {
+            swiper.slideTo(21);
           }
         }}
       >
         <SwiperSlide><Intro1 /></SwiperSlide>
         <SwiperSlide><Intro2 /></SwiperSlide>
+        <SwiperSlide><NicknameInput nickname={nickname} onNicknameChange={setNickname} /></SwiperSlide>
         <SwiperSlide><QuestionSlide category={categories[0]} questionNumber={1} score={scores[0]} onScoreChange={(v) => handleScoreChange(0, v)} /></SwiperSlide>
         <SwiperSlide><QuestionSlide category={categories[1]} questionNumber={2} score={scores[1]} onScoreChange={(v) => handleScoreChange(1, v)} /></SwiperSlide>
         <SwiperSlide><CoachInfo1 /></SwiperSlide>

@@ -16,6 +16,7 @@ class MailSubscription extends Model
     protected $fillable = [
         'user_id',
         'email',
+        'nickname',
         'token',
         'settings_token',
         'is_active',
