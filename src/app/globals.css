@@ -217,12 +217,13 @@ body {
 
 /* Swipe hint (horizontal) */
 .swipe-hint-horizontal {
-  position: absolute;
-  bottom: 64px;
+  position: fixed;
+  bottom: 120px;
   right: 32px;
   display: flex;
   align-items: center;
   gap: 8px;
+  z-index: 40;
 }
 
 @keyframes subtle-bounce-right {
@@ -264,10 +265,25 @@ body {
   letter-spacing: 0.02em;
   text-decoration: none;
   border: none;
+  border-radius: 8px;
   cursor: pointer;
   position: relative;
   overflow: hidden;
   transition: background 0.3s ease, transform 0.3s ease;
+}
+
+/* ゆっくり脈打つアニメーション */
+@keyframes pulse-subtle {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.03);
+  }
+}
+
+.animate-pulse-subtle {
+  animation: pulse-subtle 2s ease-in-out infinite;
 }
 
 .cta-button:hover {
@@ -328,6 +344,7 @@ body {
   font-weight: 400;
   transition: all 0.3s ease;
   border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
   background: transparent;
   color: var(--foreground-light);
 }
@@ -351,6 +368,7 @@ body {
   height: 100px;
   padding: 16px;
   border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
   background: rgba(255, 255, 255, 0.6);
   color: var(--foreground);
   font-family: var(--font-serif);
@@ -383,6 +401,7 @@ body {
   text-decoration: none;
   transition: all 0.3s ease;
   border: none;
+  border-radius: 8px;
   cursor: pointer;
 }
 

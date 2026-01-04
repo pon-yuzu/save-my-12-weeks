@@ -35,9 +35,17 @@ function SwipeHint({ text = "swipe" }: { text?: string }) {
 }
 
 // 【1】導入① - ファーストビュー
-function Intro1() {
+function Intro1({
+  name,
+  onNameChange,
+  onStart,
+}: {
+  name: string;
+  onNameChange: (name: string) => void;
+  onStart: () => void;
+}) {
   return (
-    <div className="slide-content">
+    <div className="slide-content items-center text-center">
       <p className="text-xs font-display-en uppercase tracking-[0.3em] text-[#0d7377] mb-8 animate-fade-in-up">
         Save My 12 Weeks
       </p>
@@ -56,13 +64,31 @@ function Intro1() {
         実際に使われている診断ツール。
       </p>
 
-      <p className="text-[#2d2d2d] text-sm leading-[2] animate-fade-in-up animate-delay-4">
+      <p className="text-[#2d2d2d] text-sm leading-[2] mb-8 animate-fade-in-up animate-delay-4">
         人生を8つの領域に分けて、
         <br />
         今の自分の「現在地」を見える化する。
       </p>
 
-      <SwipeHint />
+      <div className="w-full max-w-xs animate-fade-in-up animate-delay-5">
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => onNameChange(e.target.value)}
+          placeholder="お名前（ニックネームOK）"
+          className="w-full px-4 py-3 border border-[rgba(0,0,0,0.1)] bg-[rgba(255,255,255,0.6)] text-center text-[#2d2d2d] placeholder-[#9a9a9a] focus:outline-none focus:border-[#0d7377] transition-colors rounded-lg"
+        />
+      </div>
+
+      <div className="h-6" />
+
+      <button
+        onClick={onStart}
+        disabled={!name.trim()}
+        className={`cta-button ${!name.trim() ? "opacity-50 cursor-not-allowed" : "animate-pulse-subtle"}`}
+      >
+        始める
+      </button>
     </div>
   );
 }
@@ -386,7 +412,8 @@ function Complete({ onShowResult }: { onShowResult: () => void }) {
 }
 
 // 【16】結果（ホイール）
-function ResultWheel({ scores }: { scores: number[] }) {
+function ResultWheel({ scores, userName, onNext }: { scores: number[]; userName: string; onNext: () => void }) {
+  const wheelRef = useRef<HTMLDivElement>(null);
   const centerRadius = 22;
   const minRadius = 38;
   const maxRadius = 130;
@@ -419,14 +446,84 @@ function ResultWheel({ scores }: { scores: number[] }) {
   const angleStep = (Math.PI * 2) / categories.length;
   const gap = 0.03;
 
+  const handleSave = async () => {
+    if (!wheelRef.current) return;
+    try {
+      const canvas = await html2canvas(wheelRef.current, {
+        backgroundColor: "#faf8f5",
+        scale: 2,
+      });
+      const link = document.createElement("a");
+      link.download = "life-balance-wheel.png";
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    } catch (error) {
+      console.error("保存に失敗しました", error);
+    }
+  };
+
   return (
-    <div className="slide-content items-center text-center">
+    <div className="slide-content items-center text-center relative">
+      {/* 保存用の隠しホイール */}
+      <div ref={wheelRef} style={{ position: "absolute", left: "-9999px", padding: "20px", background: "#faf8f5" }}>
+        <p style={{ textAlign: "center", fontSize: "12px", color: "#0d7377", marginBottom: "4px", fontFamily: "serif" }}>
+          {userName}のライフバランス
+        </p>
+        <p style={{ textAlign: "center", fontSize: "10px", color: "#9a9a9a", marginBottom: "10px" }}>
+          {new Date().toLocaleDateString("ja-JP", { year: "numeric", month: "long", day: "numeric" })}
+        </p>
+        <svg viewBox="-170 -170 340 340" width="300" height="300">
+          {[5, 10].map((i) => (
+            <circle key={i} cx={0} cy={0} r={minRadius + ((maxRadius - minRadius) * (i - 1) / 9)} fill="none" stroke="rgba(0,0,0,0.06)" strokeWidth={1} />
+          ))}
+          {categories.map((cat, i) => {
+            const startAngle = angleStep * i - Math.PI / 2 + gap;
+            const endAngle = angleStep * (i + 1) - Math.PI / 2 - gap;
+            const midAngle = (startAngle + endAngle) / 2;
+            const fillRadius = minRadius + ((maxRadius - minRadius) * (scores[i] - 1) / 9);
+            const labelRadius = maxRadius + 22;
+            const labelX = Math.round(Math.cos(midAngle) * labelRadius * 100) / 100;
+            const labelY = Math.round(Math.sin(midAngle) * labelRadius * 100) / 100;
+            const scoreRadius = (centerRadius + fillRadius) / 2;
+            const scoreX = Math.round(Math.cos(midAngle) * scoreRadius * 100) / 100;
+            const scoreY = Math.round(Math.sin(midAngle) * scoreRadius * 100) / 100;
+            return (
+              <g key={cat.id}>
+                <path d={createArcPath(startAngle, endAngle, centerRadius, maxRadius)} fill="rgba(255,255,255,0.6)" stroke="rgba(0,0,0,0.04)" strokeWidth={1} />
+                <path d={createArcPath(startAngle, endAngle, centerRadius, fillRadius)} fill={cat.color} opacity={0.85} />
+                <text x={labelX} y={labelY} fontSize={9} fill="#6b6b6b" textAnchor="middle" dominantBaseline="middle">{cat.name}</text>
+                <text x={scoreX} y={scoreY} fontSize={14} fill="#fff" textAnchor="middle" dominantBaseline="middle" fontWeight={600}>{scores[i]}</text>
+              </g>
+            );
+          })}
+          <circle cx={0} cy={0} r={centerRadius - 1} fill="#faf8f5" stroke="#0d7377" strokeWidth={1} />
+          <text x={0} y={1} fontSize={9} fill="#0d7377" textAnchor="middle" dominantBaseline="middle" fontWeight={500}>LIFE</text>
+        </svg>
+        <p style={{ textAlign: "center", fontSize: "10px", color: "#9a9a9a", marginTop: "10px" }}>
+          Save My 12 Weeks
+        </p>
+      </div>
+
+      {/* 右上の保存ボタン */}
+      <button
+        onClick={handleSave}
+        className="absolute top-0 right-0 p-2 text-[#9a9a9a] hover:text-[#0d7377] transition-colors"
+        title="画像を保存"
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
+        </svg>
+      </button>
+
       <p className="text-xs font-display-en uppercase tracking-[0.3em] text-[#0d7377] mb-2 animate-fade-in-up">
         Your Result
       </p>
-      <h2 className="heading-lg mb-8 animate-fade-in-up animate-delay-1">
-        あなたの<span className="text-[#0d7377]">ライフバランス</span>
+      <h2 className="heading-lg mb-2 animate-fade-in-up animate-delay-1">
+        {userName}の<span className="text-[#0d7377]">ライフバランス</span>
       </h2>
+      <p className="text-xs text-[#9a9a9a] mb-6 animate-fade-in-up animate-delay-1">
+        {new Date().toLocaleDateString("ja-JP", { year: "numeric", month: "long", day: "numeric" })}
+      </p>
 
       <div className="relative w-[300px] h-[300px] mx-auto animate-fade-in-up animate-delay-2">
         <svg viewBox="-170 -170 340 340" className="w-full h-full">
@@ -507,16 +604,26 @@ function ResultWheel({ scores }: { scores: number[] }) {
         ))}
       </div>
 
-      <SwipeHint />
+      <div className="h-4" />
+
+      <button onClick={onNext} className="cta-button animate-pulse-subtle">
+        12週間あったら、どこ変える？→
+      </button>
     </div>
   );
 }
 
-// 【16後半】結果メッセージ
-function ResultMessage() {
+// 【16後半】メルマガ登録
+function NewsletterSignup({ onNext, email, onEmailChange }: { onNext: () => void; email: string; onEmailChange: (email: string) => void }) {
+  const handleSubmit = () => {
+    if (email.trim() && email.includes("@")) {
+      onNext();
+    }
+  };
+
   return (
     <div className="slide-content items-center text-center">
-      <div className="card-minimal text-center max-w-sm animate-fade-in-up">
+      <div className="text-center max-w-sm animate-fade-in-up">
         <p className="text-[#6b6b6b] leading-[2.2] text-sm">
           私、今まで何してたんだろう。
           <br />
@@ -524,14 +631,36 @@ function ResultMessage() {
         </p>
         <div className="h-px w-16 bg-[#0d7377]/20 mx-auto my-6" />
         <p className="text-[#6b6b6b] leading-[2.2] text-sm">
-          だって、これからこんなに
+          12週間のうち、最初の<span className="text-[#0d7377] font-medium">30日</span>で
           <br />
-          人生を楽しくしていけるんだって、
+          ライフコーチのアプローチを体験してみない？
+        </p>
+        <p className="text-[#6b6b6b] leading-[2.2] text-sm mt-4">
+          毎日届くメールで、
           <br />
-          <span className="text-[#0d7377] font-medium">伸びしろ十分</span>ってことでしょ。
+          あなたの人生の車輪から「行動」に落とし込んでいこう。
         </p>
       </div>
-      <SwipeHint />
+
+      <div className="w-full max-w-xs mt-8 animate-fade-in-up animate-delay-1">
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => onEmailChange(e.target.value)}
+          placeholder="メールアドレス"
+          className="w-full px-4 py-3 border border-[rgba(0,0,0,0.1)] bg-[rgba(255,255,255,0.6)] text-center text-[#2d2d2d] placeholder-[#9a9a9a] focus:outline-none focus:border-[#0d7377] transition-colors rounded-lg"
+        />
+      </div>
+
+      <div className="h-4" />
+
+      <button
+        onClick={handleSubmit}
+        disabled={!email.trim() || !email.includes("@")}
+        className={`cta-button ${!email.trim() || !email.includes("@") ? "opacity-50 cursor-not-allowed" : "animate-pulse-subtle"}`}
+      >
+        30日間、試してみる →
+      </button>
     </div>
   );
 }
@@ -542,11 +671,15 @@ function AdditionalQuestion({
   onToggleArea,
   freeText,
   onFreeTextChange,
+  onNext,
+  onBack,
 }: {
   selectedAreas: string[];
   onToggleArea: (id: string) => void;
   freeText: string;
   onFreeTextChange: (text: string) => void;
+  onNext: () => void;
+  onBack: () => void;
 }) {
   return (
     <div className="slide-content items-center text-center">
@@ -585,13 +718,20 @@ function AdditionalQuestion({
         />
       </div>
 
-      <SwipeHint />
+      <div className="flex items-center justify-center gap-4 mt-8 w-full max-w-xs animate-fade-in-up animate-delay-4">
+        <button onClick={onBack} className="text-sm text-[#9a9a9a] hover:text-[#0d7377] transition-colors">
+          ← 結果を見返す
+        </button>
+        <button onClick={onNext} className="cta-button">
+          次へ →
+        </button>
+      </div>
     </div>
   );
 }
 
-// 【18】セミナー案内 + シェア
-function SeminarCTA({ selectedAreas, scores }: { selectedAreas: string[]; scores: number[] }) {
+// 【18】登録完了 + セミナー案内
+function ThankYou({ selectedAreas, scores }: { selectedAreas: string[]; scores: number[] }) {
   const [appUrl, setAppUrl] = useState("");
   const wheelRef = useRef<HTMLDivElement>(null);
 
@@ -678,18 +818,29 @@ function SeminarCTA({ selectedAreas, scores }: { selectedAreas: string[]; scores
         </p>
       </div>
 
-      <p className="text-xs font-display-en uppercase tracking-[0.3em] text-[#0d7377] mb-6 animate-fade-in-up">
+      <p className="text-xs font-display-en uppercase tracking-[0.3em] text-[#0d7377] mb-4 animate-fade-in-up">
+        Thank You
+      </p>
+
+      <h2 className="heading-xl mb-6 animate-fade-in-up animate-delay-1">
+        登録しました！
+      </h2>
+
+      <div className="card-minimal text-center max-w-sm mb-8 animate-fade-in-up animate-delay-2">
+        <p className="text-[#6b6b6b] text-sm leading-[2]">
+          メールが届かない場合は、
+          <br />
+          <span className="text-[#0d7377] font-medium">迷惑メールフォルダ</span>も確認してね。
+        </p>
+      </div>
+
+      <div className="h-px w-16 bg-[#0d7377]/20 mx-auto mb-8 animate-fade-in-up animate-delay-2" />
+
+      <p className="text-xs font-display-en uppercase tracking-[0.3em] text-[#0d7377] mb-4 animate-fade-in-up animate-delay-3">
         Next Step
       </p>
 
-      <h2 className="heading-xl mb-3 animate-fade-in-up animate-delay-1">
-        <span className="text-[#0d7377]">12週間</span>で
-      </h2>
-      <h2 className="heading-xl mb-8 animate-fade-in-up animate-delay-2">
-        人生を変える
-      </h2>
-
-      <p className="text-[#6b6b6b] text-sm leading-[2] mb-10 animate-fade-in-up animate-delay-3">
+      <p className="text-[#6b6b6b] text-sm leading-[2] mb-6 animate-fade-in-up animate-delay-3">
         女性限定の無料セミナーで、
         <br />
         一緒に次の一歩を踏み出しませんか？
@@ -699,7 +850,7 @@ function SeminarCTA({ selectedAreas, scores }: { selectedAreas: string[]; scores
         href="https://docs.google.com/forms/d/e/1FAIpQLSfwMWzx0PhMKFJYQvYMCAabNUHb3wFH_-HeRlDvWikwApNzww/viewform?usp=header"
         target="_blank"
         rel="noopener noreferrer"
-        className="cta-button mb-12 animate-fade-in-up animate-delay-4"
+        className="cta-button mb-10 animate-fade-in-up animate-delay-4"
       >
         無料セミナーに参加する
       </a>
@@ -732,9 +883,11 @@ function SeminarCTA({ selectedAreas, scores }: { selectedAreas: string[]; scores
 
 // メインアプリ
 export default function DiagnosisApp() {
+  const [userName, setUserName] = useState("");
   const [scores, setScores] = useState<number[]>([5, 5, 5, 5, 5, 5, 5, 5]);
   const [selectedAreas, setSelectedAreas] = useState<string[]>([]);
   const [freeText, setFreeText] = useState("");
+  const [email, setEmail] = useState("");
   const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
   const [currentSlide, setCurrentSlide] = useState(1);
   const [resultShown, setResultShown] = useState(false);
@@ -753,6 +906,12 @@ export default function DiagnosisApp() {
       prev.includes(id) ? prev.filter((a) => a !== id) : [...prev, id]
     );
   }, []);
+
+  const handleStart = useCallback(() => {
+    if (swiperInstance && userName.trim()) {
+      swiperInstance.slideNext();
+    }
+  }, [swiperInstance, userName]);
 
   const handleShowResult = useCallback(() => {
     if (swiperInstance) {
@@ -788,10 +947,12 @@ export default function DiagnosisApp() {
         speed={500}
         spaceBetween={0}
         slidesPerView={1}
-        noSwipingSelector="input[type='range']"
+        noSwipingSelector="input, textarea"
         touchStartPreventDefault={false}
         resistanceRatio={0}
         touchReleaseOnEdges={false}
+        allowSlideNext={currentSlide < 17 && (currentSlide !== 1 || userName.trim().length > 0)}
+        allowSlidePrev={currentSlide < 17}
         className="h-full w-full pb-[100px]"
         onSwiper={setSwiperInstance}
         onSlideChange={(swiper) => {
@@ -802,7 +963,7 @@ export default function DiagnosisApp() {
           }
         }}
       >
-        <SwiperSlide><Intro1 /></SwiperSlide>
+        <SwiperSlide><Intro1 name={userName} onNameChange={setUserName} onStart={handleStart} /></SwiperSlide>
         <SwiperSlide><Intro2 /></SwiperSlide>
         <SwiperSlide><QuestionSlide category={categories[0]} questionNumber={1} score={scores[0]} onScoreChange={(v) => handleScoreChange(0, v)} /></SwiperSlide>
         <SwiperSlide><QuestionSlide category={categories[1]} questionNumber={2} score={scores[1]} onScoreChange={(v) => handleScoreChange(1, v)} /></SwiperSlide>
@@ -818,14 +979,14 @@ export default function DiagnosisApp() {
         <SwiperSlide><QuestionSlide category={categories[6]} questionNumber={7} score={scores[6]} onScoreChange={(v) => handleScoreChange(6, v)} /></SwiperSlide>
         <SwiperSlide><QuestionSlide category={categories[7]} questionNumber={8} score={scores[7]} onScoreChange={(v) => handleScoreChange(7, v)} /></SwiperSlide>
         <SwiperSlide><Complete onShowResult={handleShowResult} /></SwiperSlide>
-        <SwiperSlide><ResultWheel scores={scores} /></SwiperSlide>
-        <SwiperSlide><ResultMessage /></SwiperSlide>
-        <SwiperSlide><AdditionalQuestion selectedAreas={selectedAreas} onToggleArea={handleToggleArea} freeText={freeText} onFreeTextChange={setFreeText} /></SwiperSlide>
-        <SwiperSlide><SeminarCTA selectedAreas={selectedAreas} scores={scores} /></SwiperSlide>
+        <SwiperSlide><ResultWheel scores={scores} userName={userName} onNext={() => { if (swiperInstance) { swiperInstance.allowSlideNext = true; swiperInstance.slideNext(); } }} /></SwiperSlide>
+        <SwiperSlide><AdditionalQuestion selectedAreas={selectedAreas} onToggleArea={handleToggleArea} freeText={freeText} onFreeTextChange={setFreeText} onNext={() => { if (swiperInstance) { swiperInstance.allowSlideNext = true; swiperInstance.slideNext(); } }} onBack={() => { if (swiperInstance) { swiperInstance.allowSlidePrev = true; swiperInstance.slideTo(16); } }} /></SwiperSlide>
+        <SwiperSlide><NewsletterSignup email={email} onEmailChange={setEmail} onNext={() => { if (swiperInstance) { swiperInstance.allowSlideNext = true; swiperInstance.slideNext(); } }} /></SwiperSlide>
+        <SwiperSlide><ThankYou selectedAreas={selectedAreas} scores={scores} /></SwiperSlide>
       </Swiper>
 
-      {/* Journey Bar */}
-      <JourneyBar currentStep={currentSlide} totalSteps={totalSlides} />
+      {/* Journey Bar - 結果画面以降は非表示 */}
+      {currentSlide > 1 && currentSlide < 17 && <JourneyBar currentStep={currentSlide} totalSteps={totalSlides} />}
     </div>
   );
 }

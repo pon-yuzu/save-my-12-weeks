@@ -1,0 +1,4 @@
+[00:00:01.887] Server  LOG     ✓ Ready in 1664ms
+[01:04:31.086] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/yuzupon/Desktop/save-my-12-weeks/frontend/src/app'
+[01:04:31.090] Server  ERROR   ⨯ "unhandledRejection:" Error: ENOENT: no such file or directory, scandir '/Users/yuzupon/Desktop/save-my-12-weeks/frontend/src/app'
+[01:04:31.096] Server  ERROR   ⨯ "unhandledRejection: " Error: ENOENT: no such file or directory, scandir '/Users/yuzupon/Desktop/save-my-12-weeks/frontend/src/app'
