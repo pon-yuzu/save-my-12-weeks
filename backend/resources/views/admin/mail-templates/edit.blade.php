@@ -36,9 +36,19 @@
         <div class="form-group">
             <label class="form-label">本文（HTML）</label>
             <textarea name="body" class="form-textarea" style="min-height: 300px;" required>{{ old('body', $mailTemplate->body) }}</textarea>
-            <p style="margin-top: 8px; font-size: 0.85rem; color: var(--admin-text-light);">
-                HTMLタグが使用できます。変数: {name}（名前）, {unsubscribe_url}（配信停止URL）
-            </p>
+            <div style="margin-top: 12px; padding: 16px; background: #f5f5f5; border-radius: 4px; font-size: 0.85rem;">
+                <p style="margin: 0 0 8px; font-weight: 500; color: var(--admin-text);">利用可能な変数（件名・本文で使用可）：</p>
+                <ul style="margin: 0; padding-left: 20px; color: var(--admin-text-light); line-height: 1.8;">
+                    <li><code style="background: #fff; padding: 2px 6px; border-radius: 3px;">${areas_to_change}</code> - 診断で選んだ「変えたい項目」</li>
+                    <li><code style="background: #fff; padding: 2px 6px; border-radius: 3px;">${day_number}</code> - 現在のDay番号</li>
+                    <li><code style="background: #fff; padding: 2px 6px; border-radius: 3px;">${unsubscribe_url}</code> - 配信停止URL</li>
+                    <li><code style="background: #fff; padding: 2px 6px; border-radius: 3px;">${seminar_application_url}</code> - セミナー申込URL</li>
+                    <li><code style="background: #fff; padding: 2px 6px; border-radius: 3px;">${next_seminar_date}</code> - 次回セミナー日程</li>
+                    <li><code style="background: #fff; padding: 2px 6px; border-radius: 3px;">${zoom_url}</code> - Zoom URL</li>
+                    <li><code style="background: #fff; padding: 2px 6px; border-radius: 3px;">${line_openchat_url}</code> - LINEオープンチャットURL</li>
+                </ul>
+                <p style="margin: 8px 0 0; color: var(--admin-text-light);">HTMLタグも使用可能です。</p>
+            </div>
         </div>
 
         <div class="form-group">

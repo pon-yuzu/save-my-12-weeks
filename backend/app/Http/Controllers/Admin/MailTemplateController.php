@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\MailDelivery;
 use App\Models\MailTemplate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class MailTemplateController extends Controller
 {
@@ -12,7 +14,16 @@ class MailTemplateController extends Controller
     {
         $templates = MailTemplate::orderBy('day_number')->get();
 
-        return view('admin.mail-templates.index', compact('templates'));
+        // 各テンプレートの開封率を取得
+        $stats = MailDelivery::select('template_id')
+            ->selectRaw('COUNT(*) as sent_count')
+            ->selectRaw('SUM(CASE WHEN opened_at IS NOT NULL THEN 1 ELSE 0 END) as opened_count')
+            ->where('status', 'sent')
+            ->groupBy('template_id')
+            ->get()
+            ->keyBy('template_id');
+
+        return view('admin.mail-templates.index', compact('templates', 'stats'));
     }
 
     public function create()

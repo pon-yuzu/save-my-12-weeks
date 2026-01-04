@@ -30,6 +30,23 @@
     </div>
 </div>
 
+<div class="stat-grid" style="margin-top: 24px;">
+    <div class="stat-card">
+        <h3>📧 メール送信数</h3>
+        <div class="value">{{ number_format($stats['emails_sent']) }}</div>
+    </div>
+    <div class="stat-card">
+        <h3>📬 開封数</h3>
+        <div class="value">{{ number_format($stats['emails_opened']) }}</div>
+    </div>
+    <div class="stat-card">
+        <h3>📊 開封率</h3>
+        <div class="value" style="color: {{ $stats['open_rate'] >= 30 ? '#22c55e' : ($stats['open_rate'] >= 20 ? '#f59e0b' : '#ef4444') }};">
+            {{ $stats['open_rate'] }}%
+        </div>
+    </div>
+</div>
+
 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
     <div class="admin-card">
         <h3 style="margin-bottom: 16px; font-size: 1.1rem;">最近のセミナー申込</h3>

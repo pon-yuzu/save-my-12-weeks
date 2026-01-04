@@ -11,7 +11,7 @@
         </div>
 
         <div style="line-height: 2;">
-            {!! $template->body !!}
+            {!! $personalizedBody !!}
         </div>
 
         <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e0d8cc; font-size: 0.85rem; color: #666;">
@@ -24,5 +24,8 @@
             </p>
         </div>
     </div>
+    @if($trackingPixelUrl)
+    <img src="{{ $trackingPixelUrl }}" alt="" width="1" height="1" style="display:none;border:0;" />
+    @endif
 </body>
 </html>
