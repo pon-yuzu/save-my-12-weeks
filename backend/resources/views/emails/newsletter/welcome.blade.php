@@ -25,7 +25,7 @@
         <div style="background: #fff; border-left: 4px solid #0d7377; padding: 16px 20px; margin: 24px 0;">
             <p style="margin: 0; font-weight: 500;">⏰ 配信時間を選ぶ</p>
             <p style="margin: 8px 0 0 0; color: #666; font-size: 0.9rem;">
-                現在の配信時間は<strong>朝7時</strong>です。<br>
+                現在の配信時間は<strong>朝8時</strong>です。<br>
                 お好みの時間に変更できます。
             </p>
             <p style="margin: 12px 0 0 0;">
