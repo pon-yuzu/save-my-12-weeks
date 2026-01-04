@@ -11,7 +11,7 @@
         </div>
 
         <div style="line-height: 2;">
-            {!! $template->body !!}
+            {!! $personalizedBody !!}
         </div>
 
         <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e0d8cc; font-size: 0.85rem; color: #666;">
