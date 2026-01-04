@@ -56,7 +56,7 @@
 
             <p style="margin: 10px 0;">▼ note / YouTube</p>
             <p style="margin: 5px 0;"><a href="https://note.com/ponglish_in_aus" style="color: #0d7377;">note.com/ponglish_in_aus</a></p>
-            <p style="margin: 5px 0;"><a href="https://www.youtube.com/@geek-out-with-me" style="color: #0d7377;">youtube.com/@geek-out-with-me</a></p>
+            <p style="margin: 5px 0;"><a href="https://www.youtube.com/@cairsen1000" style="color: #0d7377;">youtube.com/@cairsen1000</a></p>
 
             <p style="margin: 15px 0; padding: 10px; background: #f0ebe3; border-radius: 4px; font-size: 0.8rem;">
                 ※ このメールは配信専用です。ご返信いただいてもお答えできません。<br>
