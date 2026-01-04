@@ -56,6 +56,16 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | External Service URLs
+    |--------------------------------------------------------------------------
+    */
+
+    'seminar_url' => env('SEMINAR_URL', 'https://docs.google.com/forms/d/e/1FAIpQLSfwMWzx0PhMKFJYQvYMCAabNUHb3wFH_-HeRlDvWikwApNzww/viewform'),
+    'line_url' => env('LINE_URL', 'https://line.me/R/ti/p/@your-line-id'),
+    'booking_url' => env('BOOKING_URL', 'https://your-booking-url.com'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Timezone
     |--------------------------------------------------------------------------
     |

@@ -39,20 +39,32 @@
         </div>
 
         <p style="margin-bottom: 20px;">
-            何かご質問があれば、いつでもこのメールに返信してください。
-        </p>
-
-        <p style="margin-bottom: 20px;">
             Sayaka
         </p>
 
         <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e0d8cc; font-size: 0.85rem; color: #666;">
             <p style="margin: 5px 0;">━━━━━━━━━━━━━━━</p>
-            <p style="margin: 5px 0;">Save My 12 Weeks｜私の12週間を取り戻せ</p>
+            <p style="margin: 5px 0;"><strong>Save My 12 Weeks</strong>｜私の12週間を取り戻せ</p>
             <p style="margin: 5px 0;">主催：Sayaka</p>
-            <p style="margin: 5px 0;">━━━━━━━━━━━━━━━</p>
+            <p style="margin: 10px 0;">━━━━━━━━━━━━━━━</p>
+
+            <p style="margin: 10px 0;">▼ 無料セミナーに参加する（オプチャで仲間と繋がれます）</p>
+            <p style="margin: 5px 0;"><a href="{{ config('app.seminar_url') }}" style="color: #0d7377;">{{ config('app.seminar_url') }}</a></p>
+
+            <p style="margin: 10px 0;">▼ 公式LINE</p>
+            <p style="margin: 5px 0;"><a href="{{ config('app.line_url') }}" style="color: #0d7377;">{{ config('app.line_url') }}</a></p>
+
+            <p style="margin: 10px 0;">▼ note / YouTube</p>
+            <p style="margin: 5px 0;"><a href="https://note.com/ponglish_in_aus" style="color: #0d7377;">note.com/ponglish_in_aus</a></p>
+            <p style="margin: 5px 0;"><a href="https://www.youtube.com/@geek-out-with-me" style="color: #0d7377;">youtube.com/@geek-out-with-me</a></p>
+
+            <p style="margin: 15px 0; padding: 10px; background: #f0ebe3; border-radius: 4px; font-size: 0.8rem;">
+                ※ このメールは配信専用です。ご返信いただいてもお答えできません。<br>
+                お問い合わせは公式LINE、またはSNSのDMよりお願いします。
+            </p>
+
             <p style="margin-top: 16px;">
-                <a href="{{ route('unsubscribe.show', $subscription->token) }}" style="color: #666;">配信停止はこちら</a>
+                <a href="{{ route('unsubscribe.show', $subscription->token) }}" style="color: #999; font-size: 0.8rem;">配信停止はこちら</a>
             </p>
         </div>
     </div>
