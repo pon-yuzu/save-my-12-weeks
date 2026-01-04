@@ -18,3 +18,10 @@ foreach ($deliveryTimes as $time) {
         ->withoutOverlapping()
         ->appendOutputTo(storage_path('logs/newsletter.log'));
 }
+
+// 予約配信の送信（毎分チェック）
+Schedule::command('broadcasts:send-scheduled')
+    ->everyMinute()
+    ->timezone('Asia/Tokyo')
+    ->withoutOverlapping()
+    ->appendOutputTo(storage_path('logs/broadcasts.log'));

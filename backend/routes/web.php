@@ -23,6 +23,7 @@ Route::get('/unsubscribe-complete', [UnsubscribeController::class, 'complete'])-
 
 // メール開封トラッキング
 Route::get('/t/{token}', [MailTrackingController::class, 'pixel'])->name('mail.track');
+Route::get('/tracking/{type}/{id}', [MailTrackingController::class, 'broadcastPixel'])->name('tracking.pixel');
 
 // 配信時間設定
 Route::get('/settings/time/{token}', [SettingsController::class, 'showTime'])->name('settings.time');

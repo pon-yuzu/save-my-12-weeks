@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BroadcastRecipient;
 use App\Models\MailDelivery;
 use Illuminate\Http\Response;
 
@@ -19,7 +20,29 @@ class MailTrackingController extends Controller
             $delivery->recordOpen();
         }
 
-        // 1x1 透明GIFを返す
+        return $this->transparentGif();
+    }
+
+    /**
+     * ブロードキャスト用トラッキングピクセル
+     */
+    public function broadcastPixel(string $type, int $id): Response
+    {
+        if ($type === 'broadcast') {
+            $recipient = BroadcastRecipient::find($id);
+            if ($recipient && !$recipient->opened_at) {
+                $recipient->update(['opened_at' => now()]);
+            }
+        }
+
+        return $this->transparentGif();
+    }
+
+    /**
+     * 1x1 透明GIFを返す
+     */
+    private function transparentGif(): Response
+    {
         $gif = base64_decode('R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7');
 
         return response($gif, 200, [

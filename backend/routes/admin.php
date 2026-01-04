@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\BroadcastController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DiagnosisController;
 use App\Http\Controllers\Admin\InvitationController;
@@ -36,6 +37,10 @@ Route::middleware('admin')->group(function () {
 
     // メールテンプレート
     Route::resource('mail-templates', MailTemplateController::class)->names('admin.mail-templates');
+
+    // ブロードキャスト（一斉・個別メール）
+    Route::get('/broadcasts/preview', [BroadcastController::class, 'preview'])->name('admin.broadcasts.preview');
+    Route::resource('broadcasts', BroadcastController::class)->names('admin.broadcasts');
 
     // セミナー申込
     Route::get('/seminar-applications', [SeminarApplicationController::class, 'index'])->name('admin.seminar-applications.index');
