@@ -590,8 +590,109 @@ function AdditionalQuestion({
   );
 }
 
-// 【18】セミナー案内 + シェア
-function SeminarCTA({ selectedAreas, scores }: { selectedAreas: string[]; scores: number[] }) {
+// 配信時間の選択肢
+const preferredTimeOptions = [
+  { value: "06:00", label: "朝6時（早起き派）" },
+  { value: "07:00", label: "朝7時（デフォルト）" },
+  { value: "08:00", label: "朝8時（通勤前）" },
+  { value: "12:00", label: "お昼12時（ランチタイム）" },
+  { value: "18:00", label: "夕方6時（仕事終わり）" },
+  { value: "20:00", label: "夜8時（寝る前）" },
+];
+
+// 【18】メルマガ登録
+function NewsletterSignup({
+  email,
+  onEmailChange,
+  preferredTime,
+  onPreferredTimeChange,
+  onSubmit,
+  isSubmitting,
+  error,
+}: {
+  email: string;
+  onEmailChange: (email: string) => void;
+  preferredTime: string;
+  onPreferredTimeChange: (time: string) => void;
+  onSubmit: () => void;
+  isSubmitting: boolean;
+  error: string;
+}) {
+  return (
+    <div className="slide-content items-center text-center">
+      <p className="text-xs font-display-en uppercase tracking-[0.3em] text-[#0d7377] mb-6 animate-fade-in-up">
+        Newsletter
+      </p>
+
+      <h2 className="heading-lg mb-3 animate-fade-in-up animate-delay-1">
+        <span className="text-[#0d7377]">30日間</span>の
+      </h2>
+      <h2 className="heading-lg mb-6 animate-fade-in-up animate-delay-2">
+        無料メール講座
+      </h2>
+
+      <p className="text-[#6b6b6b] text-sm leading-[2] mb-8 animate-fade-in-up animate-delay-3">
+        今日から30日間、毎日1通ずつ
+        <br />
+        自分と向き合うヒントをお届けします。
+      </p>
+
+      <div className="w-full max-w-xs space-y-4 animate-fade-in-up animate-delay-4">
+        {/* メールアドレス入力 */}
+        <div>
+          <label className="block text-xs text-[#9a9a9a] mb-2 text-left font-display-en uppercase tracking-[0.15em]">
+            Email Address
+          </label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => onEmailChange(e.target.value)}
+            placeholder="your@email.com"
+            className="styled-input w-full"
+          />
+        </div>
+
+        {/* 配信時間選択 */}
+        <div>
+          <label className="block text-xs text-[#9a9a9a] mb-2 text-left font-display-en uppercase tracking-[0.15em]">
+            Delivery Time <span className="normal-case tracking-normal">（任意）</span>
+          </label>
+          <select
+            value={preferredTime}
+            onChange={(e) => onPreferredTimeChange(e.target.value)}
+            className="styled-select w-full"
+          >
+            {preferredTimeOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+          <p className="text-xs text-[#9a9a9a] mt-2 text-left leading-relaxed">
+            「明日やろう」をできるだけ防ぐために、
+            <br />
+            あなたが読みやすい時間をお選びください。
+          </p>
+        </div>
+
+        {error && (
+          <p className="text-red-500 text-sm">{error}</p>
+        )}
+
+        <button
+          onClick={onSubmit}
+          disabled={isSubmitting || !email}
+          className="cta-button w-full disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {isSubmitting ? "登録中..." : "無料で始める"}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// 【19】完了 + セミナー案内 + シェア
+function CompleteCTA({ selectedAreas, scores }: { selectedAreas: string[]; scores: number[] }) {
   const [appUrl, setAppUrl] = useState("");
   const wheelRef = useRef<HTMLDivElement>(null);
 
@@ -679,33 +780,35 @@ function SeminarCTA({ selectedAreas, scores }: { selectedAreas: string[]; scores
       </div>
 
       <p className="text-xs font-display-en uppercase tracking-[0.3em] text-[#0d7377] mb-6 animate-fade-in-up">
-        Next Step
+        Registration Complete
       </p>
 
-      <h2 className="heading-xl mb-3 animate-fade-in-up animate-delay-1">
-        <span className="text-[#0d7377]">12週間</span>で
-      </h2>
-      <h2 className="heading-xl mb-8 animate-fade-in-up animate-delay-2">
-        人生を変える
+      <h2 className="heading-xl mb-6 animate-fade-in-up animate-delay-1">
+        ありがとう！
       </h2>
 
-      <p className="text-[#6b6b6b] text-sm leading-[2] mb-10 animate-fade-in-up animate-delay-3">
-        女性限定の無料セミナーで、
+      <p className="text-[#6b6b6b] text-sm leading-[2] mb-8 animate-fade-in-up animate-delay-2">
+        メールをチェックしてね。
         <br />
-        一緒に次の一歩を踏み出しませんか？
+        明日から30日間、毎日届くよ。
       </p>
 
-      <a
-        href="https://docs.google.com/forms/d/e/1FAIpQLSfwMWzx0PhMKFJYQvYMCAabNUHb3wFH_-HeRlDvWikwApNzww/viewform?usp=header"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="cta-button mb-12 animate-fade-in-up animate-delay-4"
-      >
-        無料セミナーに参加する
-      </a>
+      <div className="card-minimal mb-8 animate-fade-in-up animate-delay-3">
+        <p className="text-[#2d2d2d] text-sm leading-[2] mb-2">
+          <span className="text-[#0d7377] font-medium">女性限定の無料セミナー</span>も
+          <br />
+          開催中！
+        </p>
+        <a
+          href="/seminar"
+          className="text-[#0d7377] text-sm underline underline-offset-4"
+        >
+          セミナーに申し込む →
+        </a>
+      </div>
 
-      <p className="text-xs text-[#9a9a9a] mb-4 font-display-en uppercase tracking-[0.15em] animate-fade-in-up animate-delay-5">Share</p>
-      <div className="flex gap-3 flex-wrap justify-center animate-fade-in-up animate-delay-5">
+      <p className="text-xs text-[#9a9a9a] mb-4 font-display-en uppercase tracking-[0.15em] animate-fade-in-up animate-delay-4">Share</p>
+      <div className="flex gap-3 flex-wrap justify-center animate-fade-in-up animate-delay-4">
         <a
           href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(appUrl)}`}
           target="_blank"
@@ -738,7 +841,15 @@ export default function DiagnosisApp() {
   const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
   const [currentSlide, setCurrentSlide] = useState(1);
   const [resultShown, setResultShown] = useState(false);
-  const totalSlides = 20;
+  const totalSlides = 21;
+
+  // メルマガ登録用ステート
+  const [email, setEmail] = useState("");
+  const [preferredTime, setPreferredTime] = useState("07:00");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+  const [diagnosisId, setDiagnosisId] = useState<number | null>(null);
+  const [isRegistered, setIsRegistered] = useState(false);
 
   const handleScoreChange = useCallback((index: number, value: number) => {
     setScores((prev) => {
@@ -760,6 +871,69 @@ export default function DiagnosisApp() {
       swiperInstance.slideNext();
     }
   }, [swiperInstance]);
+
+  // 診断結果を保存してからメルマガ登録
+  const handleNewsletterSubmit = useCallback(async () => {
+    if (!email || isSubmitting) return;
+
+    setIsSubmitting(true);
+    setSubmitError("");
+
+    try {
+      // まず診断結果を保存
+      let currentDiagnosisId = diagnosisId;
+      if (!currentDiagnosisId) {
+        const diagnosisResponse = await fetch("/api/diagnosis", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            health_score: scores[0],
+            mind_score: scores[1],
+            money_score: scores[2],
+            career_score: scores[3],
+            time_score: scores[4],
+            living_score: scores[5],
+            relationships_score: scores[6],
+            vision_score: scores[7],
+            selected_areas: selectedAreas,
+            free_text: freeText,
+          }),
+        });
+
+        const diagnosisData = await diagnosisResponse.json();
+        if (diagnosisData.success) {
+          currentDiagnosisId = diagnosisData.diagnosis_id;
+          setDiagnosisId(currentDiagnosisId);
+        }
+      }
+
+      // メルマガ登録
+      const subscribeResponse = await fetch("/api/newsletter/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          preferred_time: preferredTime,
+          diagnosis_id: currentDiagnosisId,
+        }),
+      });
+
+      const subscribeData = await subscribeResponse.json();
+
+      if (subscribeData.success) {
+        setIsRegistered(true);
+        if (swiperInstance) {
+          swiperInstance.slideNext();
+        }
+      } else {
+        setSubmitError(subscribeData.message || "登録に失敗しました。");
+      }
+    } catch (error) {
+      setSubmitError("通信エラーが発生しました。もう一度お試しください。");
+    } finally {
+      setIsSubmitting(false);
+    }
+  }, [email, preferredTime, isSubmitting, diagnosisId, scores, selectedAreas, freeText, swiperInstance]);
 
   return (
     <div className="h-screen w-screen relative">
@@ -788,7 +962,7 @@ export default function DiagnosisApp() {
         speed={500}
         spaceBetween={0}
         slidesPerView={1}
-        noSwipingSelector="input[type='range']"
+        noSwipingSelector="input[type='range'], input[type='email'], select, textarea"
         touchStartPreventDefault={false}
         resistanceRatio={0}
         touchReleaseOnEdges={false}
@@ -799,6 +973,10 @@ export default function DiagnosisApp() {
           // 結果表示後は、ResultWheel（スライド17、index 16）より前には戻れない
           if (resultShown && swiper.activeIndex < 16) {
             swiper.slideTo(16);
+          }
+          // 登録完了後は、完了画面（スライド21、index 20）から戻れない
+          if (isRegistered && swiper.activeIndex < 20) {
+            swiper.slideTo(20);
           }
         }}
       >
@@ -821,7 +999,18 @@ export default function DiagnosisApp() {
         <SwiperSlide><ResultWheel scores={scores} /></SwiperSlide>
         <SwiperSlide><ResultMessage /></SwiperSlide>
         <SwiperSlide><AdditionalQuestion selectedAreas={selectedAreas} onToggleArea={handleToggleArea} freeText={freeText} onFreeTextChange={setFreeText} /></SwiperSlide>
-        <SwiperSlide><SeminarCTA selectedAreas={selectedAreas} scores={scores} /></SwiperSlide>
+        <SwiperSlide>
+          <NewsletterSignup
+            email={email}
+            onEmailChange={setEmail}
+            preferredTime={preferredTime}
+            onPreferredTimeChange={setPreferredTime}
+            onSubmit={handleNewsletterSubmit}
+            isSubmitting={isSubmitting}
+            error={submitError}
+          />
+        </SwiperSlide>
+        <SwiperSlide><CompleteCTA selectedAreas={selectedAreas} scores={scores} /></SwiperSlide>
       </Swiper>
 
       {/* Journey Bar */}

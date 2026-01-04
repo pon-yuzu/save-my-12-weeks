@@ -19,9 +19,24 @@ class MailSubscription extends Model
         'token',
         'is_active',
         'current_day',
+        'preferred_time',
         'subscribed_at',
         'unsubscribed_at',
     ];
+
+    /**
+     * 配信時間の選択肢
+     */
+    public const PREFERRED_TIMES = [
+        '06:00' => '朝6時（早起き派）',
+        '07:00' => '朝7時（デフォルト）',
+        '08:00' => '朝8時（通勤前）',
+        '12:00' => 'お昼12時（ランチタイム）',
+        '18:00' => '夕方6時（仕事終わり）',
+        '20:00' => '夜8時（寝る前）',
+    ];
+
+    public const DEFAULT_PREFERRED_TIME = '07:00';
 
     protected function casts(): array
     {

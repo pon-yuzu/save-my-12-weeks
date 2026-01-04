@@ -38,8 +38,11 @@ class DiagnosisController extends Controller
     {
         $validated = $request->validate([
             'email' => ['required', 'email', 'max:255'],
+            'preferred_time' => ['nullable', 'date_format:H:i', 'in:06:00,07:00,08:00,12:00,18:00,20:00'],
             'diagnosis_id' => ['nullable', 'exists:diagnosis_results,id'],
         ]);
+
+        $preferredTime = $validated['preferred_time'] ?? MailSubscription::DEFAULT_PREFERRED_TIME;
 
         // 既存の登録をチェック
         $existing = MailSubscription::where('email', $validated['email'])->first();
@@ -56,6 +59,7 @@ class DiagnosisController extends Controller
             $existing->update([
                 'is_active' => true,
                 'current_day' => 1,
+                'preferred_time' => $preferredTime,
                 'subscribed_at' => now(),
                 'unsubscribed_at' => null,
             ]);
@@ -64,6 +68,7 @@ class DiagnosisController extends Controller
         } else {
             $subscription = MailSubscription::create([
                 'email' => $validated['email'],
+                'preferred_time' => $preferredTime,
             ]);
         }
 
