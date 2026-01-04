@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Models\MailDelivery;
 use App\Models\MailSubscription;
 use App\Models\MailTemplate;
 use App\Services\MailPersonalizationService;
@@ -19,16 +20,23 @@ class DailyCourseEmail extends Mailable implements ShouldQueue
     public string $unsubscribeUrl;
     public string $personalizedBody;
     public string $personalizedSubject;
+    public string $trackingPixelUrl;
 
     public function __construct(
         public MailSubscription $subscription,
-        public MailTemplate $template
+        public MailTemplate $template,
+        public ?MailDelivery $delivery = null
     ) {
         $personalization = new MailPersonalizationService();
 
         $this->unsubscribeUrl = route('unsubscribe.show', $subscription->token);
         $this->personalizedBody = $personalization->personalize($template->body, $subscription);
         $this->personalizedSubject = $personalization->personalizeSubject($template->subject, $subscription);
+
+        // トラッキングピクセルURL
+        $this->trackingPixelUrl = $delivery?->tracking_token
+            ? route('mail.track', $delivery->tracking_token)
+            : '';
     }
 
     public function envelope(): Envelope

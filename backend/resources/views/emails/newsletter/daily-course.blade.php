@@ -24,5 +24,8 @@
             </p>
         </div>
     </div>
+    @if($trackingPixelUrl)
+    <img src="{{ $trackingPixelUrl }}" alt="" width="1" height="1" style="display:none;border:0;" />
+    @endif
 </body>
 </html>

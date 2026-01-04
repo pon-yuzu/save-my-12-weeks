@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MailTrackingController;
 use App\Http\Controllers\SeminarController;
 use App\Http\Controllers\UnsubscribeController;
 use Illuminate\Support\Facades\Route;
@@ -18,3 +19,6 @@ Route::get('/seminar/complete', [SeminarController::class, 'complete'])->name('s
 Route::get('/unsubscribe/{token}', [UnsubscribeController::class, 'show'])->name('unsubscribe.show');
 Route::post('/unsubscribe/{token}', [UnsubscribeController::class, 'process'])->name('unsubscribe.process');
 Route::get('/unsubscribe-complete', [UnsubscribeController::class, 'complete'])->name('unsubscribe.complete');
+
+// メール開封トラッキング
+Route::get('/t/{token}', [MailTrackingController::class, 'pixel'])->name('mail.track');

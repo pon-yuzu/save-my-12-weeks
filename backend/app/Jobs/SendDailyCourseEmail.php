@@ -64,9 +64,9 @@ class SendDailyCourseEmail implements ShouldQueue
         ]);
 
         try {
-            // メール送信
+            // メール送信（配信レコードを渡してトラッキングを有効化）
             Mail::to($this->subscription->email)
-                ->send(new DailyCourseEmail($this->subscription, $template));
+                ->send(new DailyCourseEmail($this->subscription, $template, $delivery));
 
             // 成功時の処理
             $delivery->update([

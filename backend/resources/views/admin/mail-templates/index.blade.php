@@ -15,20 +15,38 @@
                 <th>Day</th>
                 <th>件名</th>
                 <th>ステータス</th>
+                <th>送信数</th>
+                <th>開封率</th>
                 <th>更新日</th>
                 <th>操作</th>
             </tr>
         </thead>
         <tbody>
             @forelse($templates as $template)
+            @php
+                $stat = $stats->get($template->id);
+                $sentCount = $stat?->sent_count ?? 0;
+                $openedCount = $stat?->opened_count ?? 0;
+                $openRate = $sentCount > 0 ? round(($openedCount / $sentCount) * 100, 1) : null;
+            @endphp
             <tr>
                 <td>Day {{ $template->day_number }}</td>
-                <td>{{ Str::limit($template->subject, 50) }}</td>
+                <td>{{ Str::limit($template->subject, 40) }}</td>
                 <td>
                     @if($template->is_active)
                         <span class="badge badge-success">有効</span>
                     @else
                         <span class="badge badge-danger">無効</span>
+                    @endif
+                </td>
+                <td>{{ number_format($sentCount) }}</td>
+                <td>
+                    @if($openRate !== null)
+                        <span style="color: {{ $openRate >= 30 ? '#22c55e' : ($openRate >= 20 ? '#f59e0b' : '#ef4444') }}; font-weight: 500;">
+                            {{ $openRate }}%
+                        </span>
+                    @else
+                        <span style="color: var(--admin-text-light);">-</span>
                     @endif
                 </td>
                 <td>{{ $template->updated_at->format('Y/m/d H:i') }}</td>
@@ -43,7 +61,7 @@
             </tr>
             @empty
             <tr>
-                <td colspan="5" style="text-align: center; color: var(--admin-text-light);">テンプレートがありません</td>
+                <td colspan="7" style="text-align: center; color: var(--admin-text-light);">テンプレートがありません</td>
             </tr>
             @endforelse
         </tbody>
