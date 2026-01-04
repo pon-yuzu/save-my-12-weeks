@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DiagnosisController;
 use App\Http\Controllers\Admin\InvitationController;
 use App\Http\Controllers\Admin\MailTemplateController;
+use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\SeminarApplicationController;
 use App\Http\Controllers\Admin\SeminarSettingController;
 use App\Http\Controllers\Admin\SubscriberController;
@@ -26,6 +27,10 @@ Route::middleware('admin')->group(function () {
 
     // ダッシュボード
     Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
+
+    // プロフィール
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('admin.profile.edit');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('admin.profile.update');
 
     // 登録者管理
     Route::get('/subscribers', [SubscriberController::class, 'index'])->name('admin.subscribers.index');

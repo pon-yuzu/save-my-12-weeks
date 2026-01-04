@@ -422,8 +422,8 @@
                 <span>管理画面</span>
                 @if(auth('admin')->check())
                 <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--admin-border);">
-                    <span style="font-size: 0.8rem; color: var(--foreground-muted);">{{ auth('admin')->user()->name }}</span>
-                    <span style="display: inline-block; padding: 2px 8px; font-size: 0.7rem; background: rgba(255,107,53,0.1); color: var(--color-orange); margin-left: 4px;">
+                    <a href="{{ route('admin.profile.edit') }}" style="font-size: 0.8rem; color: var(--foreground-muted); text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--color-orange)'" onmouseout="this.style.color='var(--foreground-muted)'">{{ auth('admin')->user()->name }}</a>
+                    <span style="display: inline-block; padding: 2px 8px; font-size: 0.7rem; background: rgba(255,107,53,0.1); color: var(--color-orange); margin-left: 4px; border-radius: 4px;">
                         {{ auth('admin')->user()->role_label }}
                     </span>
                 </div>
