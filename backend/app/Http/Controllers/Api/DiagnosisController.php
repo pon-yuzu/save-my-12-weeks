@@ -8,6 +8,7 @@ use App\Models\DiagnosisResult;
 use App\Models\MailSubscription;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 
 class DiagnosisController extends Controller
 {
@@ -24,14 +25,53 @@ class DiagnosisController extends Controller
             'vision_score' => ['required', 'integer', 'min:1', 'max:10'],
             'selected_areas' => ['nullable', 'array'],
             'free_text' => ['nullable', 'string', 'max:2000'],
+            'wheel_image_base64' => ['nullable', 'string'],
         ]);
 
-        $diagnosis = DiagnosisResult::create($validated);
+        // ホイール画像の保存
+        $wheelImagePath = null;
+        if (!empty($validated['wheel_image_base64'])) {
+            $wheelImagePath = $this->saveWheelImage($validated['wheel_image_base64']);
+        }
+
+        // 診断結果の保存
+        $diagnosis = DiagnosisResult::create([
+            'health_score' => $validated['health_score'],
+            'mind_score' => $validated['mind_score'],
+            'money_score' => $validated['money_score'],
+            'career_score' => $validated['career_score'],
+            'time_score' => $validated['time_score'],
+            'living_score' => $validated['living_score'],
+            'relationships_score' => $validated['relationships_score'],
+            'vision_score' => $validated['vision_score'],
+            'selected_areas' => $validated['selected_areas'] ?? null,
+            'free_text' => $validated['free_text'] ?? null,
+            'wheel_image_path' => $wheelImagePath,
+        ]);
 
         return response()->json([
             'success' => true,
             'diagnosis_id' => $diagnosis->id,
         ]);
+    }
+
+    /**
+     * Base64画像をファイルとして保存
+     */
+    private function saveWheelImage(string $base64Image): string
+    {
+        // Base64デコード
+        $imageData = preg_replace('/^data:image\/\w+;base64,/', '', $base64Image);
+        $imageData = base64_decode($imageData);
+
+        // ファイル名生成
+        $filename = 'wheel_' . uniqid() . '_' . time() . '.png';
+        $path = 'wheel_images/' . $filename;
+
+        // Storage に保存
+        Storage::disk('public')->put($path, $imageData);
+
+        return $path;
     }
 
     public function subscribe(Request $request)

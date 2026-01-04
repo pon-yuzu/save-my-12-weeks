@@ -833,6 +833,24 @@ function CompleteCTA({ selectedAreas, scores }: { selectedAreas: string[]; score
   );
 }
 
+// ホイール画像生成用のヘルパー関数
+const generateWheelImageBase64 = async (
+  wheelElement: HTMLDivElement | null
+): Promise<string | null> => {
+  if (!wheelElement) return null;
+  try {
+    const canvas = await html2canvas(wheelElement, {
+      backgroundColor: "#faf8f5",
+      scale: 2,
+      logging: false,
+    });
+    return canvas.toDataURL("image/png");
+  } catch (error) {
+    console.error("ホイール画像の生成に失敗:", error);
+    return null;
+  }
+};
+
 // メインアプリ
 export default function DiagnosisApp() {
   const [scores, setScores] = useState<number[]>([5, 5, 5, 5, 5, 5, 5, 5]);
@@ -850,6 +868,9 @@ export default function DiagnosisApp() {
   const [submitError, setSubmitError] = useState("");
   const [diagnosisId, setDiagnosisId] = useState<number | null>(null);
   const [isRegistered, setIsRegistered] = useState(false);
+
+  // ホイール画像生成用ref
+  const wheelRef = useRef<HTMLDivElement>(null);
 
   const handleScoreChange = useCallback((index: number, value: number) => {
     setScores((prev) => {
@@ -880,7 +901,10 @@ export default function DiagnosisApp() {
     setSubmitError("");
 
     try {
-      // まず診断結果を保存
+      // ホイール画像を生成
+      const wheelImageBase64 = await generateWheelImageBase64(wheelRef.current);
+
+      // まず診断結果を保存（ホイール画像も含む）
       let currentDiagnosisId = diagnosisId;
       if (!currentDiagnosisId) {
         const diagnosisResponse = await fetch("/api/diagnosis", {
@@ -897,6 +921,7 @@ export default function DiagnosisApp() {
             vision_score: scores[7],
             selected_areas: selectedAreas,
             free_text: freeText,
+            wheel_image_base64: wheelImageBase64,
           }),
         });
 
@@ -935,11 +960,69 @@ export default function DiagnosisApp() {
     }
   }, [email, preferredTime, isSubmitting, diagnosisId, scores, selectedAreas, freeText, swiperInstance]);
 
+  // ホイール描画用の定数と関数（画像生成用）
+  const centerRadius = 22;
+  const minRadius = 38;
+  const maxRadius = 130;
+  const getRadiusForScore = (score: number) => minRadius + ((maxRadius - minRadius) * (score - 1) / 9);
+  const round = (n: number) => Math.round(n * 100) / 100;
+  const createArcPath = (startAngle: number, endAngle: number, innerRadius: number, outerRadius: number) => {
+    const startInnerX = round(Math.cos(startAngle) * innerRadius);
+    const startInnerY = round(Math.sin(startAngle) * innerRadius);
+    const endInnerX = round(Math.cos(endAngle) * innerRadius);
+    const endInnerY = round(Math.sin(endAngle) * innerRadius);
+    const startOuterX = round(Math.cos(startAngle) * outerRadius);
+    const startOuterY = round(Math.sin(startAngle) * outerRadius);
+    const endOuterX = round(Math.cos(endAngle) * outerRadius);
+    const endOuterY = round(Math.sin(endAngle) * outerRadius);
+    const largeArcFlag = endAngle - startAngle > Math.PI ? 1 : 0;
+    return `M ${startInnerX} ${startInnerY} L ${startOuterX} ${startOuterY} A ${outerRadius} ${outerRadius} 0 ${largeArcFlag} 1 ${endOuterX} ${endOuterY} L ${endInnerX} ${endInnerY} A ${innerRadius} ${innerRadius} 0 ${largeArcFlag} 0 ${startInnerX} ${startInnerY} Z`;
+  };
+  const angleStep = (Math.PI * 2) / categories.length;
+  const gap = 0.03;
+
   return (
     <div className="h-screen w-screen relative">
       {/* Background */}
       <div className="mesh-bg" />
       <div className="noise-overlay" />
+
+      {/* ホイール画像生成用の隠しエレメント */}
+      <div ref={wheelRef} style={{ position: "absolute", left: "-9999px", padding: "20px", background: "#faf8f5" }}>
+        <p style={{ textAlign: "center", fontSize: "14px", color: "#0d7377", marginBottom: "10px", fontFamily: "serif" }}>
+          My Life Balance
+        </p>
+        <svg viewBox="-170 -170 340 340" width="300" height="300">
+          {[5, 10].map((i) => (
+            <circle key={i} cx={0} cy={0} r={getRadiusForScore(i)} fill="none" stroke="rgba(0,0,0,0.06)" strokeWidth={1} />
+          ))}
+          {categories.map((cat, i) => {
+            const startAngle = angleStep * i - Math.PI / 2 + gap;
+            const endAngle = angleStep * (i + 1) - Math.PI / 2 - gap;
+            const midAngle = (startAngle + endAngle) / 2;
+            const fillRadius = getRadiusForScore(scores[i]);
+            const labelRadius = maxRadius + 22;
+            const labelX = round(Math.cos(midAngle) * labelRadius);
+            const labelY = round(Math.sin(midAngle) * labelRadius);
+            const scoreRadius = (centerRadius + fillRadius) / 2;
+            const scoreX = round(Math.cos(midAngle) * scoreRadius);
+            const scoreY = round(Math.sin(midAngle) * scoreRadius);
+            return (
+              <g key={cat.id}>
+                <path d={createArcPath(startAngle, endAngle, centerRadius, maxRadius)} fill="rgba(255,255,255,0.6)" stroke="rgba(0,0,0,0.04)" strokeWidth={1} />
+                <path d={createArcPath(startAngle, endAngle, centerRadius, fillRadius)} fill={cat.color} opacity={0.85} />
+                <text x={labelX} y={labelY} fontSize={9} fill="#6b6b6b" textAnchor="middle" dominantBaseline="middle">{cat.name}</text>
+                <text x={scoreX} y={scoreY} fontSize={14} fill="#fff" textAnchor="middle" dominantBaseline="middle" fontWeight={600}>{scores[i]}</text>
+              </g>
+            );
+          })}
+          <circle cx={0} cy={0} r={centerRadius - 1} fill="#faf8f5" stroke="#0d7377" strokeWidth={1} />
+          <text x={0} y={1} fontSize={9} fill="#0d7377" textAnchor="middle" dominantBaseline="middle" fontWeight={500}>LIFE</text>
+        </svg>
+        <p style={{ textAlign: "center", fontSize: "10px", color: "#9a9a9a", marginTop: "10px" }}>
+          Save My 12 Weeks
+        </p>
+      </div>
 
       <Swiper
         modules={[Pagination, Mousewheel, EffectCreative]}

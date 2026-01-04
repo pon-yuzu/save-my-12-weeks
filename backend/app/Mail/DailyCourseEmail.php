@@ -9,9 +9,11 @@ use App\Services\MailPersonalizationService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Storage;
 
 class DailyCourseEmail extends Mailable implements ShouldQueue
 {
@@ -51,5 +53,32 @@ class DailyCourseEmail extends Mailable implements ShouldQueue
         return new Content(
             view: 'emails.newsletter.daily-course',
         );
+    }
+
+    /**
+     * Day 1のみホイール画像を添付
+     *
+     * @return array<int, Attachment>
+     */
+    public function attachments(): array
+    {
+        $attachments = [];
+
+        // Day 1のみホイール画像を添付
+        if ($this->template->day_number === 1) {
+            $diagnosisResult = $this->subscription->diagnosisResult;
+
+            if ($diagnosisResult?->wheel_image_path) {
+                $path = Storage::disk('public')->path($diagnosisResult->wheel_image_path);
+
+                if (file_exists($path)) {
+                    $attachments[] = Attachment::fromPath($path)
+                        ->as('your_life_wheel.png')
+                        ->withMime('image/png');
+                }
+            }
+        }
+
+        return $attachments;
     }
 }

@@ -22,6 +22,7 @@ class DiagnosisResult extends Model
         'vision_score',
         'selected_areas',
         'free_text',
+        'wheel_image_path',
     ];
 
     protected function casts(): array
