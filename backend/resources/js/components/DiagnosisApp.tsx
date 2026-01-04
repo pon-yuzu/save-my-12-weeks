@@ -114,12 +114,16 @@ function Intro2() {
 function NicknameInput({
   nickname,
   onNicknameChange,
+  onNext,
 }: {
   nickname: string;
   onNicknameChange: (name: string) => void;
+  onNext: () => void;
 }) {
+  const isValid = nickname.trim().length > 0;
+
   return (
-    <div className="slide-content items-center text-center">
+    <div className="slide-content items-center text-center swiper-no-swiping">
       <p className="text-xs font-display-en uppercase tracking-[0.3em] text-[#0d7377] mb-8 animate-fade-in-up">
         Nice to meet you
       </p>
@@ -145,11 +149,17 @@ function NicknameInput({
         />
       </div>
 
-      <p className="text-xs text-[#9a9a9a] mt-4 animate-fade-in-up animate-delay-4">
+      <p className="text-xs text-[#9a9a9a] mt-4 mb-8 animate-fade-in-up animate-delay-4">
         メールでこの名前で呼びかけます
       </p>
 
-      <SwipeHint />
+      <button
+        onClick={onNext}
+        disabled={!isValid}
+        className="cta-button animate-fade-in-up animate-delay-5 disabled:opacity-40 disabled:cursor-not-allowed"
+      >
+        はじめる
+      </button>
     </div>
   );
 }
@@ -904,6 +914,12 @@ export default function DiagnosisApp() {
     }
   }, [swiperInstance]);
 
+  const handleNicknameNext = useCallback(() => {
+    if (nickname.trim() && swiperInstance) {
+      swiperInstance.slideNext();
+    }
+  }, [nickname, swiperInstance]);
+
   // 診断結果を保存してからメルマガ登録
   const handleNewsletterSubmit = useCallback(async () => {
     if (!email || isSubmitting) return;
@@ -1057,6 +1073,7 @@ export default function DiagnosisApp() {
         spaceBetween={0}
         slidesPerView={1}
         noSwipingSelector="input[type='range'], input[type='email'], input[type='text'], select, textarea"
+        noSwipingClass="swiper-no-swiping"
         touchStartPreventDefault={false}
         resistanceRatio={0}
         touchReleaseOnEdges={false}
@@ -1076,7 +1093,7 @@ export default function DiagnosisApp() {
       >
         <SwiperSlide><Intro1 /></SwiperSlide>
         <SwiperSlide><Intro2 /></SwiperSlide>
-        <SwiperSlide><NicknameInput nickname={nickname} onNicknameChange={setNickname} /></SwiperSlide>
+        <SwiperSlide><NicknameInput nickname={nickname} onNicknameChange={setNickname} onNext={handleNicknameNext} /></SwiperSlide>
         <SwiperSlide><QuestionSlide category={categories[0]} questionNumber={1} score={scores[0]} onScoreChange={(v) => handleScoreChange(0, v)} /></SwiperSlide>
         <SwiperSlide><QuestionSlide category={categories[1]} questionNumber={2} score={scores[1]} onScoreChange={(v) => handleScoreChange(1, v)} /></SwiperSlide>
         <SwiperSlide><CoachInfo1 /></SwiperSlide>
