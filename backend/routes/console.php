@@ -25,3 +25,17 @@ Schedule::command('broadcasts:send-scheduled')
     ->timezone('Asia/Tokyo')
     ->withoutOverlapping()
     ->appendOutputTo(storage_path('logs/broadcasts.log'));
+
+// セミナーリマインドメール（毎時チェック）
+Schedule::command('seminars:send-reminders')
+    ->hourly()
+    ->timezone('Asia/Tokyo')
+    ->withoutOverlapping()
+    ->appendOutputTo(storage_path('logs/seminar-reminders.log'));
+
+// セミナーフォローアップメール（毎時チェック）
+Schedule::command('seminars:send-followups')
+    ->hourly()
+    ->timezone('Asia/Tokyo')
+    ->withoutOverlapping()
+    ->appendOutputTo(storage_path('logs/seminar-followups.log'));

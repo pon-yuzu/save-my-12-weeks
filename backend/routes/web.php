@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\MailTrackingController;
 use App\Http\Controllers\SeminarController;
+use App\Http\Controllers\SeminarFeedbackController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\UnsubscribeController;
 use Illuminate\Support\Facades\Route;
@@ -29,3 +30,8 @@ Route::get('/tracking/{type}/{id}', [MailTrackingController::class, 'broadcastPi
 Route::get('/settings/time/{token}', [SettingsController::class, 'showTime'])->name('settings.time');
 Route::post('/settings/time/{token}', [SettingsController::class, 'updateTime'])->name('settings.time.update');
 Route::get('/settings/complete', [SettingsController::class, 'complete'])->name('settings.time.complete');
+
+// セミナーフィードバック（アンケート）
+Route::get('/seminar/feedback/{token}', [SeminarFeedbackController::class, 'show'])->name('seminar.feedback.show');
+Route::post('/seminar/feedback/{token}', [SeminarFeedbackController::class, 'submit'])->name('seminar.feedback.submit');
+Route::get('/seminar/feedback/{token}/complete', [SeminarFeedbackController::class, 'complete'])->name('seminar.feedback.complete');
