@@ -12,14 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('mail_templates', function (Blueprint $table) {
-            $table->decimal('day_number', 4, 1)->unique()->change();
+            // uniqueは初期マイグレーションで既に設定済み
+            $table->decimal('day_number', 4, 1)->change();
         });
     }
 
     public function down(): void
     {
         Schema::table('mail_templates', function (Blueprint $table) {
-            $table->unsignedTinyInteger('day_number')->unique()->change();
+            $table->unsignedTinyInteger('day_number')->change();
         });
     }
 };
