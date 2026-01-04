@@ -64,6 +64,7 @@
             width: 100%;
             padding: 12px 16px;
             border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
             background: rgba(255, 255, 255, 0.6);
             font-family: var(--font-serif);
             font-size: 1rem;
@@ -94,6 +95,7 @@
             align-items: center;
             padding: 10px 16px;
             border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s ease;
             font-size: 0.9rem;
@@ -128,6 +130,7 @@
             font-size: 1rem;
             font-weight: 500;
             border: none;
+            border-radius: 8px;
             cursor: pointer;
             transition: background 0.3s ease, transform 0.3s ease;
             margin-top: 32px;

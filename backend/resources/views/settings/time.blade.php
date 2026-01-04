@@ -58,6 +58,7 @@
         align-items: center;
         padding: 16px 20px;
         border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
         background: rgba(255, 255, 255, 0.6);
         cursor: pointer;
         transition: all 0.3s ease;
