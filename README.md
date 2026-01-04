@@ -47,3 +47,4 @@ npm run dev  # Vite dev server
 
 - [配信停止システム仕様書](docs/unsubscribe_system_spec.md)
 - [デプロイ手順](docs/DEPLOYMENT.md)
+- [ブランチ引き継ぎ書 (2026-01-04)](docs/CHANGELOG_2026-01-04.md)
