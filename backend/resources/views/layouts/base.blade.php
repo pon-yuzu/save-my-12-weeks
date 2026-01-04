@@ -163,7 +163,7 @@
             border: 1px solid var(--color-orange);
             padding: 16px;
             margin-bottom: 24px;
-            border-radius: 4px;
+            border-radius: 8px;
         }
 
         .alert-error ul {

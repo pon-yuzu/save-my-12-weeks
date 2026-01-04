@@ -147,6 +147,7 @@
         .admin-card {
             background: rgba(255, 255, 255, 0.6);
             border: 1px solid var(--admin-border);
+            border-radius: 8px;
             padding: 24px;
             margin-bottom: 24px;
         }
@@ -184,6 +185,7 @@
             text-decoration: none;
             cursor: pointer;
             border: none;
+            border-radius: 8px;
             transition: all 0.2s;
         }
 
@@ -194,6 +196,7 @@
 
         .btn-primary:hover {
             background: var(--color-orange-dark);
+            transform: translateY(-1px);
         }
 
         .btn-secondary {
@@ -205,6 +208,7 @@
         .btn-secondary:hover {
             border-color: var(--color-orange);
             color: var(--color-orange);
+            transform: translateY(-1px);
         }
 
         .btn-danger {
@@ -214,6 +218,7 @@
 
         .btn-danger:hover {
             background: var(--color-orange-dark);
+            transform: translateY(-1px);
         }
 
         .btn-sm {
@@ -226,6 +231,7 @@
             padding: 3px 10px;
             font-size: 0.75rem;
             font-weight: 500;
+            border-radius: 8px;
         }
 
         .badge-success {
@@ -260,6 +266,7 @@
             width: 100%;
             padding: 12px 16px;
             border: 1px solid var(--admin-border);
+            border-radius: 8px;
             background: rgba(255, 255, 255, 0.6);
             font-family: var(--font-serif);
             font-size: 0.9rem;
@@ -283,6 +290,7 @@
             padding: 14px 18px;
             margin-bottom: 20px;
             border: 1px solid;
+            border-radius: 8px;
         }
 
         .alert-success {
@@ -307,6 +315,7 @@
         .stat-card {
             background: rgba(255, 255, 255, 0.6);
             border: 1px solid var(--admin-border);
+            border-radius: 8px;
             padding: 24px;
         }
 
@@ -334,14 +343,17 @@
         .pagination span {
             padding: 8px 12px;
             border: 1px solid var(--admin-border);
+            border-radius: 8px;
             text-decoration: none;
             color: var(--foreground-light);
             font-size: 0.85rem;
+            transition: all 0.2s;
         }
 
         .pagination a:hover {
             border-color: var(--color-orange);
             color: var(--color-orange);
+            transform: translateY(-1px);
         }
 
         .pagination .active {
@@ -366,6 +378,7 @@
             margin: 20px;
             background: transparent;
             border: 1px solid var(--admin-border);
+            border-radius: 8px;
             color: var(--foreground-muted);
             padding: 12px;
             cursor: pointer;
@@ -378,6 +391,7 @@
         .logout-btn:hover {
             border-color: var(--color-orange);
             color: var(--color-orange);
+            transform: translateY(-1px);
         }
 
         @media (max-width: 768px) {
