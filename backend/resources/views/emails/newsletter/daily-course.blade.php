@@ -30,9 +30,9 @@
             <p style="margin: 5px 0;"><a href="https://note.com/ponglish_in_aus" style="color: #0d7377;">note.com/ponglish_in_aus</a></p>
             <p style="margin: 5px 0;"><a href="https://www.youtube.com/@cairsen1000" style="color: #0d7377;">youtube.com/@cairsen1000</a></p>
 
-            <p style="margin: 15px 0; padding: 10px; background: #f0ebe3; border-radius: 4px; font-size: 0.8rem;">
-                ※ このメールは配信専用です。ご返信いただいてもお答えできません。<br>
-                お問い合わせは公式LINE、またはSNSのDMよりお願いします。
+            <p style="margin: 15px 0; padding: 10px; background: #e8f4f3; border-radius: 4px; font-size: 0.8rem;">
+                💬 ご感想・ご質問・個別相談のご希望など、<br>
+                このメールに返信していただければ直接届きます！
             </p>
 
             <p style="margin-top: 16px;">
