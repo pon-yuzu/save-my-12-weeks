@@ -289,6 +289,17 @@ body {
   animation: pulse-subtle 2s ease-in-out infinite;
 }
 
+/* 両方のアニメーションを組み合わせる場合 */
+.animate-fade-in-up.animate-pulse-subtle {
+  animation: fadeInUp 0.7s ease-out forwards, pulse-subtle 2s ease-in-out 0.7s infinite;
+}
+
+.animate-delay-1.animate-pulse-subtle { animation-delay: 0.1s, 0.8s; }
+.animate-delay-2.animate-pulse-subtle { animation-delay: 0.2s, 0.9s; }
+.animate-delay-3.animate-pulse-subtle { animation-delay: 0.3s, 1.0s; }
+.animate-delay-4.animate-pulse-subtle { animation-delay: 0.4s, 1.1s; }
+.animate-delay-5.animate-pulse-subtle { animation-delay: 0.5s, 1.2s; }
+
 .cta-button:hover {
   background: var(--color-orange-dark);
   transform: translateY(-1px);
