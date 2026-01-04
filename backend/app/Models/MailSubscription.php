@@ -17,6 +17,7 @@ class MailSubscription extends Model
         'user_id',
         'email',
         'token',
+        'settings_token',
         'is_active',
         'current_day',
         'subscribed_at',
@@ -38,6 +39,9 @@ class MailSubscription extends Model
         static::creating(function (MailSubscription $subscription) {
             if (empty($subscription->token)) {
                 $subscription->token = Str::random(64);
+            }
+            if (empty($subscription->settings_token)) {
+                $subscription->settings_token = Str::random(64);
             }
             if (empty($subscription->subscribed_at)) {
                 $subscription->subscribed_at = now();

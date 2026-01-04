@@ -15,9 +15,27 @@
             毎日1通、短いメールが届きます。
         </p>
 
+        @if($subscription->diagnosisResult?->wheel_image_path)
+        <div style="background: #fff; border-left: 4px solid #43aa8b; padding: 16px 20px; margin: 24px 0;">
+            <p style="margin: 0; font-weight: 500;">🎨 あなたのライフホイール</p>
+            <p style="margin: 8px 0 0 0; color: #666; font-size: 0.9rem;">このメールに画像を添付しました。大切に保存してくださいね。</p>
+        </div>
+        @endif
+
         <div style="background: #fff; border-left: 4px solid #0d7377; padding: 16px 20px; margin: 24px 0;">
-            <p style="margin: 0; font-weight: 500;">明日から配信スタートです</p>
-            <p style="margin: 8px 0 0 0; color: #666; font-size: 0.9rem;">楽しみにお待ちください！</p>
+            <p style="margin: 0; font-weight: 500;">⏰ 配信時間を選ぶ</p>
+            <p style="margin: 8px 0 0 0; color: #666; font-size: 0.9rem;">
+                現在の配信時間は<strong>朝7時</strong>です。<br>
+                お好みの時間に変更できます。
+            </p>
+            <p style="margin: 12px 0 0 0;">
+                <a href="{{ $settingsUrl }}" style="display: inline-block; background: #0d7377; color: #fff; padding: 10px 20px; border-radius: 6px; text-decoration: none; font-size: 0.9rem;">配信時間を選ぶ</a>
+            </p>
+        </div>
+
+        <div style="background: #fff; border-left: 4px solid #ffb347; padding: 16px 20px; margin: 24px 0;">
+            <p style="margin: 0; font-weight: 500;">📬 明日から配信スタート！</p>
+            <p style="margin: 8px 0 0 0; color: #666; font-size: 0.9rem;">楽しみにお待ちください。</p>
         </div>
 
         <p style="margin-bottom: 20px;">

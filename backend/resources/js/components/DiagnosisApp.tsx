@@ -590,8 +590,76 @@ function AdditionalQuestion({
   );
 }
 
-// 【18】セミナー案内 + シェア
-function SeminarCTA({ selectedAreas, scores }: { selectedAreas: string[]; scores: number[] }) {
+// 【18】メルマガ登録（配信時間はDay 0メールから選択）
+function NewsletterSignup({
+  email,
+  onEmailChange,
+  onSubmit,
+  isSubmitting,
+  error,
+}: {
+  email: string;
+  onEmailChange: (email: string) => void;
+  onSubmit: () => void;
+  isSubmitting: boolean;
+  error: string;
+}) {
+  return (
+    <div className="slide-content items-center text-center">
+      <p className="text-xs font-display-en uppercase tracking-[0.3em] text-[#0d7377] mb-6 animate-fade-in-up">
+        Newsletter
+      </p>
+
+      <h2 className="heading-lg mb-3 animate-fade-in-up animate-delay-1">
+        <span className="text-[#0d7377]">30日間</span>の
+      </h2>
+      <h2 className="heading-lg mb-6 animate-fade-in-up animate-delay-2">
+        無料メール講座
+      </h2>
+
+      <p className="text-[#6b6b6b] text-sm leading-[2] mb-8 animate-fade-in-up animate-delay-3">
+        今日から30日間、毎日1通ずつ
+        <br />
+        自分と向き合うヒントをお届けします。
+      </p>
+
+      <div className="w-full max-w-xs space-y-4 animate-fade-in-up animate-delay-4">
+        {/* メールアドレス入力 */}
+        <div>
+          <label className="block text-xs text-[#9a9a9a] mb-2 text-left font-display-en uppercase tracking-[0.15em]">
+            Email Address
+          </label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => onEmailChange(e.target.value)}
+            placeholder="your@email.com"
+            className="styled-input w-full"
+          />
+        </div>
+
+        {error && (
+          <p className="text-red-500 text-sm">{error}</p>
+        )}
+
+        <button
+          onClick={onSubmit}
+          disabled={isSubmitting || !email}
+          className="cta-button w-full disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {isSubmitting ? "登録中..." : "無料で始める"}
+        </button>
+
+        <p className="text-xs text-[#9a9a9a] leading-relaxed">
+          登録後、配信時間を選べるメールが届きます。
+        </p>
+      </div>
+    </div>
+  );
+}
+
+// 【19】完了 + セミナー案内 + シェア
+function CompleteCTA({ selectedAreas, scores }: { selectedAreas: string[]; scores: number[] }) {
   const [appUrl, setAppUrl] = useState("");
   const wheelRef = useRef<HTMLDivElement>(null);
 
@@ -679,33 +747,35 @@ function SeminarCTA({ selectedAreas, scores }: { selectedAreas: string[]; scores
       </div>
 
       <p className="text-xs font-display-en uppercase tracking-[0.3em] text-[#0d7377] mb-6 animate-fade-in-up">
-        Next Step
+        Registration Complete
       </p>
 
-      <h2 className="heading-xl mb-3 animate-fade-in-up animate-delay-1">
-        <span className="text-[#0d7377]">12週間</span>で
-      </h2>
-      <h2 className="heading-xl mb-8 animate-fade-in-up animate-delay-2">
-        人生を変える
+      <h2 className="heading-xl mb-6 animate-fade-in-up animate-delay-1">
+        ありがとう！
       </h2>
 
-      <p className="text-[#6b6b6b] text-sm leading-[2] mb-10 animate-fade-in-up animate-delay-3">
-        女性限定の無料セミナーで、
+      <p className="text-[#6b6b6b] text-sm leading-[2] mb-8 animate-fade-in-up animate-delay-2">
+        メールをチェックしてね。
         <br />
-        一緒に次の一歩を踏み出しませんか？
+        明日から30日間、毎日届くよ。
       </p>
 
-      <a
-        href="https://docs.google.com/forms/d/e/1FAIpQLSfwMWzx0PhMKFJYQvYMCAabNUHb3wFH_-HeRlDvWikwApNzww/viewform?usp=header"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="cta-button mb-12 animate-fade-in-up animate-delay-4"
-      >
-        無料セミナーに参加する
-      </a>
+      <div className="card-minimal mb-8 animate-fade-in-up animate-delay-3">
+        <p className="text-[#2d2d2d] text-sm leading-[2] mb-2">
+          <span className="text-[#0d7377] font-medium">女性限定の無料セミナー</span>も
+          <br />
+          開催中！
+        </p>
+        <a
+          href="/seminar"
+          className="text-[#0d7377] text-sm underline underline-offset-4"
+        >
+          セミナーに申し込む →
+        </a>
+      </div>
 
-      <p className="text-xs text-[#9a9a9a] mb-4 font-display-en uppercase tracking-[0.15em] animate-fade-in-up animate-delay-5">Share</p>
-      <div className="flex gap-3 flex-wrap justify-center animate-fade-in-up animate-delay-5">
+      <p className="text-xs text-[#9a9a9a] mb-4 font-display-en uppercase tracking-[0.15em] animate-fade-in-up animate-delay-4">Share</p>
+      <div className="flex gap-3 flex-wrap justify-center animate-fade-in-up animate-delay-4">
         <a
           href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(appUrl)}`}
           target="_blank"
@@ -730,6 +800,24 @@ function SeminarCTA({ selectedAreas, scores }: { selectedAreas: string[]; scores
   );
 }
 
+// ホイール画像生成用のヘルパー関数
+const generateWheelImageBase64 = async (
+  wheelElement: HTMLDivElement | null
+): Promise<string | null> => {
+  if (!wheelElement) return null;
+  try {
+    const canvas = await html2canvas(wheelElement, {
+      backgroundColor: "#faf8f5",
+      scale: 2,
+      logging: false,
+    });
+    return canvas.toDataURL("image/png");
+  } catch (error) {
+    console.error("ホイール画像の生成に失敗:", error);
+    return null;
+  }
+};
+
 // メインアプリ
 export default function DiagnosisApp() {
   const [scores, setScores] = useState<number[]>([5, 5, 5, 5, 5, 5, 5, 5]);
@@ -738,7 +826,17 @@ export default function DiagnosisApp() {
   const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
   const [currentSlide, setCurrentSlide] = useState(1);
   const [resultShown, setResultShown] = useState(false);
-  const totalSlides = 20;
+  const totalSlides = 21;
+
+  // メルマガ登録用ステート
+  const [email, setEmail] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+  const [diagnosisId, setDiagnosisId] = useState<number | null>(null);
+  const [isRegistered, setIsRegistered] = useState(false);
+
+  // ホイール画像生成用ref
+  const wheelRef = useRef<HTMLDivElement>(null);
 
   const handleScoreChange = useCallback((index: number, value: number) => {
     setScores((prev) => {
@@ -761,11 +859,135 @@ export default function DiagnosisApp() {
     }
   }, [swiperInstance]);
 
+  // 診断結果を保存してからメルマガ登録
+  const handleNewsletterSubmit = useCallback(async () => {
+    if (!email || isSubmitting) return;
+
+    setIsSubmitting(true);
+    setSubmitError("");
+
+    try {
+      // ホイール画像を生成
+      const wheelImageBase64 = await generateWheelImageBase64(wheelRef.current);
+
+      // まず診断結果を保存（ホイール画像も含む）
+      let currentDiagnosisId = diagnosisId;
+      if (!currentDiagnosisId) {
+        const diagnosisResponse = await fetch("/api/diagnosis", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            health_score: scores[0],
+            mind_score: scores[1],
+            money_score: scores[2],
+            career_score: scores[3],
+            time_score: scores[4],
+            living_score: scores[5],
+            relationships_score: scores[6],
+            vision_score: scores[7],
+            selected_areas: selectedAreas,
+            free_text: freeText,
+            wheel_image_base64: wheelImageBase64,
+          }),
+        });
+
+        const diagnosisData = await diagnosisResponse.json();
+        if (diagnosisData.success) {
+          currentDiagnosisId = diagnosisData.diagnosis_id;
+          setDiagnosisId(currentDiagnosisId);
+        }
+      }
+
+      // メルマガ登録
+      const subscribeResponse = await fetch("/api/newsletter/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          diagnosis_id: currentDiagnosisId,
+        }),
+      });
+
+      const subscribeData = await subscribeResponse.json();
+
+      if (subscribeData.success) {
+        setIsRegistered(true);
+        if (swiperInstance) {
+          swiperInstance.slideNext();
+        }
+      } else {
+        setSubmitError(subscribeData.message || "登録に失敗しました。");
+      }
+    } catch (error) {
+      setSubmitError("通信エラーが発生しました。もう一度お試しください。");
+    } finally {
+      setIsSubmitting(false);
+    }
+  }, [email, isSubmitting, diagnosisId, scores, selectedAreas, freeText, swiperInstance]);
+
+  // ホイール描画用の定数と関数（画像生成用）
+  const centerRadius = 22;
+  const minRadius = 38;
+  const maxRadius = 130;
+  const getRadiusForScore = (score: number) => minRadius + ((maxRadius - minRadius) * (score - 1) / 9);
+  const round = (n: number) => Math.round(n * 100) / 100;
+  const createArcPath = (startAngle: number, endAngle: number, innerRadius: number, outerRadius: number) => {
+    const startInnerX = round(Math.cos(startAngle) * innerRadius);
+    const startInnerY = round(Math.sin(startAngle) * innerRadius);
+    const endInnerX = round(Math.cos(endAngle) * innerRadius);
+    const endInnerY = round(Math.sin(endAngle) * innerRadius);
+    const startOuterX = round(Math.cos(startAngle) * outerRadius);
+    const startOuterY = round(Math.sin(startAngle) * outerRadius);
+    const endOuterX = round(Math.cos(endAngle) * outerRadius);
+    const endOuterY = round(Math.sin(endAngle) * outerRadius);
+    const largeArcFlag = endAngle - startAngle > Math.PI ? 1 : 0;
+    return `M ${startInnerX} ${startInnerY} L ${startOuterX} ${startOuterY} A ${outerRadius} ${outerRadius} 0 ${largeArcFlag} 1 ${endOuterX} ${endOuterY} L ${endInnerX} ${endInnerY} A ${innerRadius} ${innerRadius} 0 ${largeArcFlag} 0 ${startInnerX} ${startInnerY} Z`;
+  };
+  const angleStep = (Math.PI * 2) / categories.length;
+  const gap = 0.03;
+
   return (
     <div className="h-screen w-screen relative">
       {/* Background */}
       <div className="mesh-bg" />
       <div className="noise-overlay" />
+
+      {/* ホイール画像生成用の隠しエレメント */}
+      <div ref={wheelRef} style={{ position: "absolute", left: "-9999px", padding: "20px", background: "#faf8f5" }}>
+        <p style={{ textAlign: "center", fontSize: "14px", color: "#0d7377", marginBottom: "10px", fontFamily: "serif" }}>
+          My Life Balance
+        </p>
+        <svg viewBox="-170 -170 340 340" width="300" height="300">
+          {[5, 10].map((i) => (
+            <circle key={i} cx={0} cy={0} r={getRadiusForScore(i)} fill="none" stroke="rgba(0,0,0,0.06)" strokeWidth={1} />
+          ))}
+          {categories.map((cat, i) => {
+            const startAngle = angleStep * i - Math.PI / 2 + gap;
+            const endAngle = angleStep * (i + 1) - Math.PI / 2 - gap;
+            const midAngle = (startAngle + endAngle) / 2;
+            const fillRadius = getRadiusForScore(scores[i]);
+            const labelRadius = maxRadius + 22;
+            const labelX = round(Math.cos(midAngle) * labelRadius);
+            const labelY = round(Math.sin(midAngle) * labelRadius);
+            const scoreRadius = (centerRadius + fillRadius) / 2;
+            const scoreX = round(Math.cos(midAngle) * scoreRadius);
+            const scoreY = round(Math.sin(midAngle) * scoreRadius);
+            return (
+              <g key={cat.id}>
+                <path d={createArcPath(startAngle, endAngle, centerRadius, maxRadius)} fill="rgba(255,255,255,0.6)" stroke="rgba(0,0,0,0.04)" strokeWidth={1} />
+                <path d={createArcPath(startAngle, endAngle, centerRadius, fillRadius)} fill={cat.color} opacity={0.85} />
+                <text x={labelX} y={labelY} fontSize={9} fill="#6b6b6b" textAnchor="middle" dominantBaseline="middle">{cat.name}</text>
+                <text x={scoreX} y={scoreY} fontSize={14} fill="#fff" textAnchor="middle" dominantBaseline="middle" fontWeight={600}>{scores[i]}</text>
+              </g>
+            );
+          })}
+          <circle cx={0} cy={0} r={centerRadius - 1} fill="#faf8f5" stroke="#0d7377" strokeWidth={1} />
+          <text x={0} y={1} fontSize={9} fill="#0d7377" textAnchor="middle" dominantBaseline="middle" fontWeight={500}>LIFE</text>
+        </svg>
+        <p style={{ textAlign: "center", fontSize: "10px", color: "#9a9a9a", marginTop: "10px" }}>
+          Save My 12 Weeks
+        </p>
+      </div>
 
       <Swiper
         modules={[Pagination, Mousewheel, EffectCreative]}
@@ -788,7 +1010,7 @@ export default function DiagnosisApp() {
         speed={500}
         spaceBetween={0}
         slidesPerView={1}
-        noSwipingSelector="input[type='range']"
+        noSwipingSelector="input[type='range'], input[type='email'], select, textarea"
         touchStartPreventDefault={false}
         resistanceRatio={0}
         touchReleaseOnEdges={false}
@@ -799,6 +1021,10 @@ export default function DiagnosisApp() {
           // 結果表示後は、ResultWheel（スライド17、index 16）より前には戻れない
           if (resultShown && swiper.activeIndex < 16) {
             swiper.slideTo(16);
+          }
+          // 登録完了後は、完了画面（スライド21、index 20）から戻れない
+          if (isRegistered && swiper.activeIndex < 20) {
+            swiper.slideTo(20);
           }
         }}
       >
@@ -821,7 +1047,16 @@ export default function DiagnosisApp() {
         <SwiperSlide><ResultWheel scores={scores} /></SwiperSlide>
         <SwiperSlide><ResultMessage /></SwiperSlide>
         <SwiperSlide><AdditionalQuestion selectedAreas={selectedAreas} onToggleArea={handleToggleArea} freeText={freeText} onFreeTextChange={setFreeText} /></SwiperSlide>
-        <SwiperSlide><SeminarCTA selectedAreas={selectedAreas} scores={scores} /></SwiperSlide>
+        <SwiperSlide>
+          <NewsletterSignup
+            email={email}
+            onEmailChange={setEmail}
+            onSubmit={handleNewsletterSubmit}
+            isSubmitting={isSubmitting}
+            error={submitError}
+          />
+        </SwiperSlide>
+        <SwiperSlide><CompleteCTA selectedAreas={selectedAreas} scores={scores} /></SwiperSlide>
       </Swiper>
 
       {/* Journey Bar */}
