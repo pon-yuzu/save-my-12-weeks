@@ -466,7 +466,18 @@ function ResultWheel({ scores, onNext, nickname }: { scores: number[]; onNext: (
   const gap = 0.03;
 
   return (
-    <div className="slide-content items-center text-center">
+    <div className="slide-content items-center text-center relative">
+      {/* 右上の保存ボタン */}
+      <button
+        onClick={handleSave}
+        className="absolute top-0 right-0 p-2 text-[#9a9a9a] hover:text-[#0d7377] transition-colors"
+        title="画像を保存"
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
+        </svg>
+      </button>
+
       <p className="text-xs font-display-en uppercase tracking-[0.3em] text-[#0d7377] mb-2 animate-fade-in-up">
         Your Result
       </p>
@@ -476,7 +487,7 @@ function ResultWheel({ scores, onNext, nickname }: { scores: number[]; onNext: (
       <p className="text-xs text-[#9a9a9a] mb-6 animate-fade-in-up animate-delay-1">{dateStr}</p>
 
       {/* 保存用のホイールコンテナ */}
-      <div ref={wheelRef} className="bg-[#faf8f5] p-4 relative">
+      <div ref={wheelRef} className="bg-[#faf8f5] p-4">
         <div className="relative w-[300px] h-[300px] mx-auto animate-fade-in-up animate-delay-2">
           <svg viewBox="-170 -170 340 340" className="w-full h-full">
           {/* グリッド円 */}
@@ -545,18 +556,6 @@ function ResultWheel({ scores, onNext, nickname }: { scores: number[]; onNext: (
           <text x={0} y={1} fontSize={9} fill="#0d7377" textAnchor="middle" dominantBaseline="middle" fontWeight={500} className="font-display-en">LIFE</text>
         </svg>
         </div>
-        {/* 保存ボタン - ホイール右上 */}
-        <button
-          onClick={handleSave}
-          className="absolute top-2 right-2 p-2 text-[#0d7377] hover:text-[#0a5c5f] transition-colors bg-white/80 rounded-full shadow-sm"
-          title="画像を保存"
-        >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-            <polyline points="7 10 12 15 17 10" />
-            <line x1="12" y1="15" x2="12" y2="3" />
-          </svg>
-        </button>
       </div>
 
       {/* 凡例 */}
