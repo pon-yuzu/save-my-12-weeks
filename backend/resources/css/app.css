@@ -343,9 +343,9 @@ body {
 }
 
 .score-display {
-  font-family: var(--font-display);
+  font-family: var(--font-body);
   font-size: 5rem;
-  font-weight: 400;
+  font-weight: 300;
   line-height: 1;
   letter-spacing: -0.02em;
 }

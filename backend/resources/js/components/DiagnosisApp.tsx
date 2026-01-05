@@ -482,7 +482,7 @@ function ResultWheel({ scores, onNext, nickname }: { scores: number[]; onNext: (
         Your Result
       </p>
       <h2 className="heading-lg mb-1 animate-fade-in-up animate-delay-1">
-        {nickname || "あなた"}の<span className="text-[#0d7377]">ライフバランス</span>
+        {nickname || "あなた"}さんの<span className="text-[#0d7377]">ライフバランス</span>
       </h2>
       <p className="text-xs text-[#9a9a9a] mb-6 animate-fade-in-up animate-delay-1">{dateStr}</p>
 
@@ -652,6 +652,22 @@ function SeminarPromotion({
   onBack: () => void;
   onSkip: () => void;
 }) {
+  const [nextSeminar, setNextSeminar] = useState<{
+    formatted_schedule: string;
+    is_full: boolean;
+  } | null>(null);
+
+  useEffect(() => {
+    fetch("/api/seminar/upcoming")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.seminar) {
+          setNextSeminar(data.seminar);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
   return (
     <div className="slide-content items-center text-center">
       <p className="text-xs font-display-en uppercase tracking-[0.3em] text-[#0d7377] mb-4 animate-fade-in-up">
@@ -665,8 +681,21 @@ function SeminarPromotion({
         無料オンラインセミナー
       </h2>
 
-      <div className="card-minimal w-full max-w-sm mb-6 animate-fade-in-up animate-delay-3">
-        <div className="space-y-3 text-left text-sm">
+      {/* 次回開催日 */}
+      {nextSeminar && (
+        <div className="bg-[#0d7377]/10 rounded-lg px-4 py-3 mb-6 animate-fade-in-up animate-delay-2">
+          <p className="text-xs text-[#0d7377] mb-1">次回開催</p>
+          <p className="text-sm text-[#2d2d2d] font-medium">
+            {nextSeminar.formatted_schedule}
+          </p>
+          {nextSeminar.is_full && (
+            <p className="text-xs text-[#ff6b35] mt-1">※満席</p>
+          )}
+        </div>
+      )}
+
+      <div className="card-minimal w-full max-w-sm mb-8 animate-fade-in-up animate-delay-3">
+        <div className="space-y-4 text-left text-sm">
           <div className="flex items-start gap-3">
             <span className="text-[#0d7377] mt-0.5">✓</span>
             <span className="text-[#6b6b6b]">ライフコーチと一緒に「現在地」を深掘り</span>
@@ -682,7 +711,7 @@ function SeminarPromotion({
         </div>
       </div>
 
-      <p className="text-[#9a9a9a] text-xs mb-6 animate-fade-in-up animate-delay-4">
+      <p className="text-[#9a9a9a] text-xs mb-8 animate-fade-in-up animate-delay-4">
         約2時間 / Zoom開催 / 完全無料
       </p>
 
@@ -695,7 +724,7 @@ function SeminarPromotion({
       </a>
 
       {/* サブナビゲーション */}
-      <div className="flex items-center justify-between w-full max-w-sm mt-6 animate-fade-in-up animate-delay-5">
+      <div className="flex items-center justify-between w-full max-w-sm mt-8 animate-fade-in-up animate-delay-5">
         <button onClick={onBack} className="text-sm text-[#9a9a9a] hover:text-[#0d7377] transition-colors">
           ← 結果に戻る
         </button>
