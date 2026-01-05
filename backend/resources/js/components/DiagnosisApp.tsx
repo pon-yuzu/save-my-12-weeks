@@ -590,7 +590,7 @@ function AdditionalQuestion({
         どこを変えたい？
       </p>
 
-      <div className="grid grid-cols-2 gap-2 w-full max-w-xs mb-8 animate-fade-in-up animate-delay-2">
+      <div className="grid grid-cols-2 gap-3 w-full max-w-sm mb-10 animate-fade-in-up animate-delay-2">
         {categories.map((cat) => (
           <button
             key={cat.id}
@@ -606,9 +606,9 @@ function AdditionalQuestion({
         ))}
       </div>
 
-      <div className="w-full max-w-xs animate-fade-in-up animate-delay-3">
-        <label className="block text-xs text-[#9a9a9a] mb-3 text-left font-display-en uppercase tracking-[0.15em]">
-          What would you like to do?
+      <div className="w-full max-w-sm animate-fade-in-up animate-delay-3">
+        <label className="block text-sm text-[#6b6b6b] mb-3 text-left">
+          やりたいことがあれば教えてね
         </label>
         <textarea
           value={freeText}
@@ -662,11 +662,11 @@ function NewsletterSignup({
         自分と向き合うヒントをお届けします。
       </p>
 
-      <div className="w-full max-w-xs space-y-4 animate-fade-in-up animate-delay-4">
+      <div className="w-full max-w-sm space-y-6 animate-fade-in-up animate-delay-4">
         {/* メールアドレス入力 */}
         <div>
-          <label className="block text-xs text-[#9a9a9a] mb-2 text-left font-display-en uppercase tracking-[0.15em]">
-            Email Address
+          <label className="block text-sm text-[#6b6b6b] mb-3 text-left">
+            メールアドレス
           </label>
           <input
             type="email"
@@ -689,7 +689,7 @@ function NewsletterSignup({
           {isSubmitting ? "登録中..." : "無料で始める"}
         </button>
 
-        <p className="text-xs text-[#9a9a9a] leading-relaxed">
+        <p className="text-sm text-[#9a9a9a] leading-relaxed">
           登録後、配信時間を選べるメールが届きます。
         </p>
       </div>
