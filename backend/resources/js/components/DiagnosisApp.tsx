@@ -616,7 +616,12 @@ function AdditionalQuestion({
         ))}
       </div>
 
-      <div className="w-full max-w-sm mb-8 animate-fade-in-up animate-delay-3">
+      {/* メインCTA */}
+      <button onClick={onNext} className="cta-button w-full max-w-sm animate-fade-in-up animate-delay-3 animate-pulse-subtle">
+        私の12週間を取り戻す →
+      </button>
+
+      <div className="w-full max-w-sm animate-fade-in-up animate-delay-4" style={{ marginTop: '24px' }}>
         <label className="block text-sm text-[#6b6b6b] mb-3 text-left">
           やりたいことがあれば教えてね
         </label>
@@ -628,12 +633,7 @@ function AdditionalQuestion({
         />
       </div>
 
-      {/* メインCTA */}
-      <button onClick={onNext} className="cta-button w-full max-w-sm animate-fade-in-up animate-delay-4 animate-pulse-subtle">
-        私の12週間を取り戻す →
-      </button>
-
-      <div className="flex items-center justify-center mt-6 animate-fade-in-up animate-delay-5">
+      <div className="flex items-center justify-center animate-fade-in-up animate-delay-5" style={{ marginTop: '24px' }}>
         <button onClick={onBack} className="text-sm text-[#9a9a9a] hover:text-[#0d7377] transition-colors">
           ← 結果を見返す
         </button>
