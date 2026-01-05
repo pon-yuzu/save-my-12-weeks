@@ -414,6 +414,7 @@ function Complete({ onShowResult }: { onShowResult: () => void }) {
 
 // 【16】結果（ホイール）
 function ResultWheel({ scores, onNext }: { scores: number[]; onNext: () => void }) {
+  const wheelRef = useRef<HTMLDivElement>(null);
   const centerRadius = 22;
   const minRadius = 38;
   const maxRadius = 130;
@@ -443,11 +444,40 @@ function ResultWheel({ scores, onNext }: { scores: number[]; onNext: () => void 
             Z`;
   };
 
+  const handleSave = async () => {
+    if (!wheelRef.current) return;
+    try {
+      const canvas = await html2canvas(wheelRef.current, {
+        backgroundColor: "#faf8f5",
+        scale: 2,
+      });
+      const link = document.createElement("a");
+      link.download = "life-balance-wheel.png";
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    } catch (error) {
+      console.error("保存に失敗しました", error);
+    }
+  };
+
   const angleStep = (Math.PI * 2) / categories.length;
   const gap = 0.03;
 
   return (
-    <div className="slide-content items-center text-center">
+    <div className="slide-content items-center text-center relative">
+      {/* 右上の保存ボタン */}
+      <button
+        onClick={handleSave}
+        className="absolute top-0 right-0 p-2 text-[#0d7377] hover:text-[#0a5c5f] transition-colors animate-fade-in-up"
+        title="画像を保存"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+          <polyline points="7 10 12 15 17 10" />
+          <line x1="12" y1="15" x2="12" y2="3" />
+        </svg>
+      </button>
+
       <p className="text-xs font-display-en uppercase tracking-[0.3em] text-[#0d7377] mb-2 animate-fade-in-up">
         Your Result
       </p>
@@ -455,8 +485,10 @@ function ResultWheel({ scores, onNext }: { scores: number[]; onNext: () => void 
         あなたの<span className="text-[#0d7377]">ライフバランス</span>
       </h2>
 
-      <div className="relative w-[300px] h-[300px] mx-auto animate-fade-in-up animate-delay-2">
-        <svg viewBox="-170 -170 340 340" className="w-full h-full">
+      {/* 保存用のホイールコンテナ */}
+      <div ref={wheelRef} className="bg-[#faf8f5] p-4">
+        <div className="relative w-[300px] h-[300px] mx-auto animate-fade-in-up animate-delay-2">
+          <svg viewBox="-170 -170 340 340" className="w-full h-full">
           {/* グリッド円 */}
           {[5, 10].map((i) => (
             <circle
@@ -522,6 +554,7 @@ function ResultWheel({ scores, onNext }: { scores: number[]; onNext: () => void 
           <circle cx={0} cy={0} r={centerRadius - 1} fill="#faf8f5" stroke="#0d7377" strokeWidth={1} />
           <text x={0} y={1} fontSize={9} fill="#0d7377" textAnchor="middle" dominantBaseline="middle" fontWeight={500} className="font-display-en">LIFE</text>
         </svg>
+        </div>
       </div>
 
       {/* 凡例 */}
