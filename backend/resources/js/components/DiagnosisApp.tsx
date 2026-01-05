@@ -723,13 +723,18 @@ function SeminarPromotion({
         無料セミナーに申し込む
       </a>
 
-      {/* サブナビゲーション */}
-      <div className="flex items-center justify-between w-full max-w-sm mt-8 animate-fade-in-up animate-delay-5">
+      {/* サブCTA - メール講座 */}
+      <button
+        onClick={onSkip}
+        className="w-full max-w-sm mt-4 py-3 px-6 border-2 border-[#0d7377] text-[#0d7377] rounded-xl font-medium hover:bg-[#0d7377]/5 transition-colors animate-fade-in-up animate-delay-5"
+      >
+        まずはメール講座で最初の30日を始めてみる
+      </button>
+
+      {/* 戻るリンク */}
+      <div className="mt-6 animate-fade-in-up animate-delay-5">
         <button onClick={onBack} className="text-sm text-[#9a9a9a] hover:text-[#0d7377] transition-colors">
           ← 結果に戻る
-        </button>
-        <button onClick={onSkip} className="text-sm text-[#9a9a9a] hover:text-[#0d7377] transition-colors">
-          メール講座を受ける →
         </button>
       </div>
     </div>
@@ -900,28 +905,14 @@ function CompleteCTA({ selectedAreas, scores }: { selectedAreas: string[]; score
         ありがとう！
       </h2>
 
-      <p className="text-[#6b6b6b] text-sm leading-[2] mb-8 animate-fade-in-up animate-delay-2">
+      <p className="text-[#6b6b6b] text-sm leading-[2] mb-10 animate-fade-in-up animate-delay-2">
         メールをチェックしてね。
         <br />
         明日から30日間、毎日届くよ。
       </p>
 
-      <div className="card-minimal mb-8 animate-fade-in-up animate-delay-3">
-        <p className="text-[#2d2d2d] text-sm leading-[2] mb-2">
-          <span className="text-[#0d7377] font-medium">女性限定の無料セミナー</span>も
-          <br />
-          開催中！
-        </p>
-        <a
-          href="/seminar"
-          className="text-[#0d7377] text-sm underline underline-offset-4"
-        >
-          セミナーに申し込む →
-        </a>
-      </div>
-
-      <p className="text-xs text-[#9a9a9a] mb-4 font-display-en uppercase tracking-[0.15em] animate-fade-in-up animate-delay-4">Share</p>
-      <div className="flex gap-3 flex-wrap justify-center animate-fade-in-up animate-delay-4">
+      <p className="text-xs text-[#9a9a9a] mb-4 font-display-en uppercase tracking-[0.15em] animate-fade-in-up animate-delay-3">Share</p>
+      <div className="flex gap-3 flex-wrap justify-center animate-fade-in-up animate-delay-3">
         <a
           href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(appUrl)}`}
           target="_blank"
