@@ -711,28 +711,31 @@ function SeminarPromotion({
         </div>
       </div>
 
-      <p className="text-[#9a9a9a] text-xs mb-8 animate-fade-in-up animate-delay-4">
+      <p className="text-[#9a9a9a] text-xs mb-6 animate-fade-in-up animate-delay-4">
         約2時間 / Zoom開催 / 完全無料
       </p>
 
-      {/* メインCTA */}
-      <a
-        href="/seminar"
-        className="cta-button w-full max-w-sm animate-fade-in-up animate-delay-4 animate-pulse-subtle"
-      >
-        無料セミナーに申し込む
-      </a>
+      {/* ボタンエリア */}
+      <div className="w-full max-w-sm space-y-4 mt-4 animate-fade-in-up animate-delay-4">
+        {/* メインCTA */}
+        <a
+          href="/seminar"
+          className="cta-button w-full animate-pulse-subtle"
+        >
+          無料セミナーに申し込む
+        </a>
 
-      {/* サブCTA - メール講座 */}
-      <button
-        onClick={onSkip}
-        className="w-full max-w-sm mt-4 py-3 px-6 border-2 border-[#0d7377] text-[#0d7377] rounded-xl font-medium hover:bg-[#0d7377]/5 transition-colors animate-fade-in-up animate-delay-5"
-      >
-        まずはメール講座で最初の30日を始めてみる
-      </button>
+        {/* サブCTA - メール講座 */}
+        <button
+          onClick={onSkip}
+          className="w-full py-3 px-6 border-2 border-[#0d7377] text-[#0d7377] rounded-xl font-medium hover:bg-[#0d7377]/5 transition-colors"
+        >
+          まずはメール講座で最初の30日を始めてみる
+        </button>
+      </div>
 
       {/* 戻るリンク */}
-      <div className="mt-6 animate-fade-in-up animate-delay-5">
+      <div className="mt-8 animate-fade-in-up animate-delay-5">
         <button onClick={onBack} className="text-sm text-[#9a9a9a] hover:text-[#0d7377] transition-colors">
           ← 結果に戻る
         </button>
@@ -768,15 +771,15 @@ function NewsletterSignup({
         無料メール講座
       </h2>
 
-      <p className="text-[#6b6b6b] text-sm leading-[2] mb-8 animate-fade-in-up animate-delay-3">
+      <p className="text-[#6b6b6b] text-sm leading-[2] mb-10 animate-fade-in-up animate-delay-3">
         今日から30日間、毎日1通ずつ
         <br />
         自分と向き合うヒントをお届けします。
       </p>
 
-      <div className="w-full max-w-sm space-y-6 animate-fade-in-up animate-delay-4">
+      <div className="w-full max-w-sm animate-fade-in-up animate-delay-4">
         {/* メールアドレス入力 */}
-        <div>
+        <div className="mb-6">
           <label className="block text-sm text-[#6b6b6b] mb-3 text-left">
             メールアドレス
           </label>
@@ -790,7 +793,7 @@ function NewsletterSignup({
         </div>
 
         {error && (
-          <p className="text-red-500 text-sm">{error}</p>
+          <p className="text-red-500 text-sm mb-4">{error}</p>
         )}
 
         <button
@@ -801,7 +804,7 @@ function NewsletterSignup({
           {isSubmitting ? "登録中..." : "無料で始める"}
         </button>
 
-        <p className="text-sm text-[#9a9a9a] leading-relaxed">
+        <p className="text-sm text-[#9a9a9a] leading-relaxed mt-6">
           登録後、配信時間を選べるメールが届きます。
         </p>
       </div>
