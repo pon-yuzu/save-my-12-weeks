@@ -543,30 +543,6 @@ function ResultWheel({ scores, onNext }: { scores: number[]; onNext: () => void 
   );
 }
 
-// 【16後半】結果メッセージ
-function ResultMessage() {
-  return (
-    <div className="slide-content items-center text-center">
-      <div className="card-minimal text-center max-w-sm animate-fade-in-up">
-        <p className="text-[#6b6b6b] leading-[2.2] text-sm">
-          私、今まで何してたんだろう。
-          <br />
-          そう思ったなら、<span className="text-[#0d7377] font-medium">今が踏み出すタイミング。</span>
-        </p>
-        <div className="h-px w-16 bg-[#0d7377]/20 mx-auto my-6" />
-        <p className="text-[#6b6b6b] leading-[2.2] text-sm">
-          だって、これからこんなに
-          <br />
-          人生を楽しくしていけるんだって、
-          <br />
-          <span className="text-[#0d7377] font-medium">伸びしろ十分</span>ってことでしょ。
-        </p>
-      </div>
-      <SwipeHint />
-    </div>
-  );
-}
-
 // 【17】追加質問
 function AdditionalQuestion({
   selectedAreas,
@@ -866,7 +842,7 @@ export default function DiagnosisApp() {
   const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
   const [currentSlide, setCurrentSlide] = useState(1);
   const [resultShown, setResultShown] = useState(false);
-  const totalSlides = 21; // ニックネーム入力をIntro1に統合
+  const totalSlides = 20; // ResultMessage削除後
 
   // メルマガ登録用ステート
   const [email, setEmail] = useState("");
@@ -1085,9 +1061,9 @@ export default function DiagnosisApp() {
           if (resultShown && swiper.activeIndex < 16) {
             swiper.slideTo(16);
           }
-          // 登録完了後は、完了画面（スライド21、index 20）から戻れない
-          if (isRegistered && swiper.activeIndex < 20) {
-            swiper.slideTo(20);
+          // 登録完了後は、完了画面（スライド20、index 19）から戻れない
+          if (isRegistered && swiper.activeIndex < 19) {
+            swiper.slideTo(19);
           }
         }}
       >
@@ -1108,7 +1084,6 @@ export default function DiagnosisApp() {
         <SwiperSlide><QuestionSlide category={categories[7]} questionNumber={8} score={scores[7]} onScoreChange={(v) => handleScoreChange(7, v)} /></SwiperSlide>
         <SwiperSlide><Complete onShowResult={handleShowResult} /></SwiperSlide>
         <SwiperSlide><ResultWheel scores={scores} onNext={handleResultNext} /></SwiperSlide>
-        <SwiperSlide><ResultMessage /></SwiperSlide>
         <SwiperSlide><AdditionalQuestion selectedAreas={selectedAreas} onToggleArea={handleToggleArea} freeText={freeText} onFreeTextChange={setFreeText} onBack={handleBackToResult} /></SwiperSlide>
         <SwiperSlide>
           <NewsletterSignup
