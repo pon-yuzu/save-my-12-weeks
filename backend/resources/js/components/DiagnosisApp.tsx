@@ -716,7 +716,7 @@ function SeminarPromotion({
       </p>
 
       {/* ボタンエリア */}
-      <div className="w-full max-w-sm space-y-6 mt-6 animate-fade-in-up animate-delay-4">
+      <div className="w-full max-w-sm mt-8 animate-fade-in-up animate-delay-4">
         {/* メインCTA */}
         <a
           href="/seminar"
@@ -728,14 +728,14 @@ function SeminarPromotion({
         {/* サブCTA - メール講座 */}
         <button
           onClick={onSkip}
-          className="w-full py-4 px-6 border-2 border-[#0d7377] text-[#0d7377] rounded-xl font-medium hover:bg-[#0d7377]/5 transition-colors"
+          className="w-full mt-6 py-4 px-6 border-2 border-[#0d7377] text-[#0d7377] rounded-xl font-medium hover:bg-[#0d7377]/5 transition-colors"
         >
           まずはメール講座で<br />最初の30日を始めてみる
         </button>
       </div>
 
       {/* 戻るリンク */}
-      <div className="mt-10 animate-fade-in-up animate-delay-5">
+      <div className="mt-12 animate-fade-in-up animate-delay-5">
         <button onClick={onBack} className="text-sm text-[#9a9a9a] hover:text-[#0d7377] transition-colors">
           ← 結果に戻る
         </button>
