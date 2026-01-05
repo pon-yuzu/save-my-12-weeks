@@ -558,8 +558,12 @@ function ResultWheel({ scores, onNext, nickname }: { scores: number[]; onNext: (
         </div>
       </div>
 
+      <button onClick={onNext} className="cta-button animate-pulse-subtle" style={{ whiteSpace: 'nowrap', marginTop: '16px' }}>
+        12週間あったら、どこ変える？ →
+      </button>
+
       {/* 凡例 */}
-      <div className="grid grid-cols-2 gap-2 mt-6 text-xs animate-fade-in-up animate-delay-3">
+      <div className="grid grid-cols-2 gap-2 text-xs animate-fade-in-up animate-delay-3" style={{ marginTop: '24px' }}>
         {categories.map((cat, i) => (
           <div key={cat.id} className="flex items-center gap-2">
             <div className="w-2 h-2" style={{ backgroundColor: cat.color }} />
@@ -567,12 +571,6 @@ function ResultWheel({ scores, onNext, nickname }: { scores: number[]; onNext: (
           </div>
         ))}
       </div>
-
-      <div className="h-4" />
-
-      <button onClick={onNext} className="cta-button animate-pulse-subtle" style={{ whiteSpace: 'nowrap' }}>
-        12週間あったら、どこ変える？ →
-      </button>
     </div>
   );
 }
