@@ -583,12 +583,14 @@ function AdditionalQuestion({
   freeText,
   onFreeTextChange,
   onBack,
+  onNext,
 }: {
   selectedAreas: string[];
   onToggleArea: (id: string) => void;
   freeText: string;
   onFreeTextChange: (text: string) => void;
   onBack: () => void;
+  onNext: () => void;
 }) {
   return (
     <div className="slide-content items-center text-center">
@@ -599,7 +601,7 @@ function AdditionalQuestion({
         どこを変えたい？
       </p>
 
-      <div className="grid grid-cols-2 gap-3 w-full max-w-sm mb-10 animate-fade-in-up animate-delay-2">
+      <div className="grid grid-cols-2 gap-3 w-full max-w-sm mb-8 animate-fade-in-up animate-delay-2">
         {categories.map((cat) => (
           <button
             key={cat.id}
@@ -615,7 +617,7 @@ function AdditionalQuestion({
         ))}
       </div>
 
-      <div className="w-full max-w-sm animate-fade-in-up animate-delay-3">
+      <div className="w-full max-w-sm mb-8 animate-fade-in-up animate-delay-3">
         <label className="block text-sm text-[#6b6b6b] mb-3 text-left">
           やりたいことがあれば教えてね
         </label>
@@ -627,18 +629,84 @@ function AdditionalQuestion({
         />
       </div>
 
-      <div className="flex items-center justify-center gap-4 mt-8 w-full max-w-xs animate-fade-in-up animate-delay-4">
+      {/* メインCTA */}
+      <button onClick={onNext} className="cta-button w-full max-w-sm animate-fade-in-up animate-delay-4 animate-pulse-subtle">
+        私の12週間を取り戻す →
+      </button>
+
+      <div className="flex items-center justify-center mt-6 animate-fade-in-up animate-delay-5">
         <button onClick={onBack} className="text-sm text-[#9a9a9a] hover:text-[#0d7377] transition-colors">
           ← 結果を見返す
         </button>
       </div>
-
-      <SwipeHint />
     </div>
   );
 }
 
-// 【18】メルマガ登録（配信時間はDay 0メールから選択）
+// 【18】セミナー案内
+function SeminarPromotion({
+  onBack,
+  onSkip,
+}: {
+  onBack: () => void;
+  onSkip: () => void;
+}) {
+  return (
+    <div className="slide-content items-center text-center">
+      <p className="text-xs font-display-en uppercase tracking-[0.3em] text-[#0d7377] mb-4 animate-fade-in-up">
+        Save My 12 Weeks
+      </p>
+
+      <h2 className="heading-lg mb-2 animate-fade-in-up animate-delay-1">
+        <span className="text-[#0d7377]">女性限定</span>の
+      </h2>
+      <h2 className="heading-xl mb-6 animate-fade-in-up animate-delay-2">
+        無料オンラインセミナー
+      </h2>
+
+      <div className="card-minimal w-full max-w-sm mb-6 animate-fade-in-up animate-delay-3">
+        <div className="space-y-3 text-left text-sm">
+          <div className="flex items-start gap-3">
+            <span className="text-[#0d7377] mt-0.5">✓</span>
+            <span className="text-[#6b6b6b]">ライフコーチと一緒に「現在地」を深掘り</span>
+          </div>
+          <div className="flex items-start gap-3">
+            <span className="text-[#0d7377] mt-0.5">✓</span>
+            <span className="text-[#6b6b6b]">参加者限定のLINEコミュニティに招待</span>
+          </div>
+          <div className="flex items-start gap-3">
+            <span className="text-[#0d7377] mt-0.5">✓</span>
+            <span className="text-[#6b6b6b]">同じ想いを持つ仲間と出会える</span>
+          </div>
+        </div>
+      </div>
+
+      <p className="text-[#9a9a9a] text-xs mb-6 animate-fade-in-up animate-delay-4">
+        約2時間 / Zoom開催 / 完全無料
+      </p>
+
+      {/* メインCTA */}
+      <a
+        href="/seminar"
+        className="cta-button w-full max-w-sm animate-fade-in-up animate-delay-4 animate-pulse-subtle"
+      >
+        無料セミナーに申し込む
+      </a>
+
+      {/* サブナビゲーション */}
+      <div className="flex items-center justify-between w-full max-w-sm mt-6 animate-fade-in-up animate-delay-5">
+        <button onClick={onBack} className="text-sm text-[#9a9a9a] hover:text-[#0d7377] transition-colors">
+          ← 結果に戻る
+        </button>
+        <button onClick={onSkip} className="text-sm text-[#9a9a9a] hover:text-[#0d7377] transition-colors">
+          メール講座を受ける →
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// 【19】メルマガ登録
 function NewsletterSignup({
   email,
   onEmailChange,
@@ -875,7 +943,7 @@ export default function DiagnosisApp() {
   const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
   const [currentSlide, setCurrentSlide] = useState(1);
   const [resultShown, setResultShown] = useState(false);
-  const totalSlides = 20; // ResultMessage削除後
+  const totalSlides = 21; // SeminarPromotion追加後
 
   // メルマガ登録用ステート
   const [email, setEmail] = useState("");
@@ -1094,9 +1162,9 @@ export default function DiagnosisApp() {
           if (resultShown && swiper.activeIndex < 16) {
             swiper.slideTo(16);
           }
-          // 登録完了後は、完了画面（スライド20、index 19）から戻れない
-          if (isRegistered && swiper.activeIndex < 19) {
-            swiper.slideTo(19);
+          // 登録完了後は、完了画面（スライド21、index 20）から戻れない
+          if (isRegistered && swiper.activeIndex < 20) {
+            swiper.slideTo(20);
           }
         }}
       >
@@ -1117,7 +1185,22 @@ export default function DiagnosisApp() {
         <SwiperSlide><QuestionSlide category={categories[7]} questionNumber={8} score={scores[7]} onScoreChange={(v) => handleScoreChange(7, v)} /></SwiperSlide>
         <SwiperSlide><Complete onShowResult={handleShowResult} /></SwiperSlide>
         <SwiperSlide><ResultWheel scores={scores} onNext={handleResultNext} /></SwiperSlide>
-        <SwiperSlide><AdditionalQuestion selectedAreas={selectedAreas} onToggleArea={handleToggleArea} freeText={freeText} onFreeTextChange={setFreeText} onBack={handleBackToResult} /></SwiperSlide>
+        <SwiperSlide>
+          <AdditionalQuestion
+            selectedAreas={selectedAreas}
+            onToggleArea={handleToggleArea}
+            freeText={freeText}
+            onFreeTextChange={setFreeText}
+            onBack={handleBackToResult}
+            onNext={() => swiperInstance?.slideNext()}
+          />
+        </SwiperSlide>
+        <SwiperSlide>
+          <SeminarPromotion
+            onBack={handleBackToResult}
+            onSkip={() => swiperInstance?.slideNext()}
+          />
+        </SwiperSlide>
         <SwiperSlide>
           <NewsletterSignup
             email={email}
