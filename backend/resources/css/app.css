@@ -187,11 +187,11 @@ body {
   color: var(--color-orange);
 }
 
-/* English display font */
+/* English display font - 読みやすいサンセリフに変更 */
 .font-display-en {
-  font-family: var(--font-display);
+  font-family: var(--font-body);
   font-weight: 500;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.12em;
 }
 
 /* =========================

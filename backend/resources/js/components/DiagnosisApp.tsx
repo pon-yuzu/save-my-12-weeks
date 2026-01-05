@@ -413,8 +413,10 @@ function Complete({ onShowResult }: { onShowResult: () => void }) {
 }
 
 // 【16】結果（ホイール）
-function ResultWheel({ scores, onNext }: { scores: number[]; onNext: () => void }) {
+function ResultWheel({ scores, onNext, nickname }: { scores: number[]; onNext: () => void; nickname: string }) {
   const wheelRef = useRef<HTMLDivElement>(null);
+  const today = new Date();
+  const dateStr = `${today.getFullYear()}.${String(today.getMonth() + 1).padStart(2, '0')}.${String(today.getDate()).padStart(2, '0')}`;
   const centerRadius = 22;
   const minRadius = 38;
   const maxRadius = 130;
@@ -464,29 +466,17 @@ function ResultWheel({ scores, onNext }: { scores: number[]; onNext: () => void 
   const gap = 0.03;
 
   return (
-    <div className="slide-content items-center text-center relative">
-      {/* 右上の保存ボタン */}
-      <button
-        onClick={handleSave}
-        className="absolute top-0 right-0 p-2 text-[#0d7377] hover:text-[#0a5c5f] transition-colors animate-fade-in-up"
-        title="画像を保存"
-      >
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-          <polyline points="7 10 12 15 17 10" />
-          <line x1="12" y1="15" x2="12" y2="3" />
-        </svg>
-      </button>
-
+    <div className="slide-content items-center text-center">
       <p className="text-xs font-display-en uppercase tracking-[0.3em] text-[#0d7377] mb-2 animate-fade-in-up">
         Your Result
       </p>
-      <h2 className="heading-lg mb-8 animate-fade-in-up animate-delay-1">
-        あなたの<span className="text-[#0d7377]">ライフバランス</span>
+      <h2 className="heading-lg mb-1 animate-fade-in-up animate-delay-1">
+        {nickname || "あなた"}の<span className="text-[#0d7377]">ライフバランス</span>
       </h2>
+      <p className="text-xs text-[#9a9a9a] mb-6 animate-fade-in-up animate-delay-1">{dateStr}</p>
 
       {/* 保存用のホイールコンテナ */}
-      <div ref={wheelRef} className="bg-[#faf8f5] p-4">
+      <div ref={wheelRef} className="bg-[#faf8f5] p-4 relative">
         <div className="relative w-[300px] h-[300px] mx-auto animate-fade-in-up animate-delay-2">
           <svg viewBox="-170 -170 340 340" className="w-full h-full">
           {/* グリッド円 */}
@@ -555,6 +545,18 @@ function ResultWheel({ scores, onNext }: { scores: number[]; onNext: () => void 
           <text x={0} y={1} fontSize={9} fill="#0d7377" textAnchor="middle" dominantBaseline="middle" fontWeight={500} className="font-display-en">LIFE</text>
         </svg>
         </div>
+        {/* 保存ボタン - ホイール右上 */}
+        <button
+          onClick={handleSave}
+          className="absolute top-2 right-2 p-2 text-[#0d7377] hover:text-[#0a5c5f] transition-colors bg-white/80 rounded-full shadow-sm"
+          title="画像を保存"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="7 10 12 15 17 10" />
+            <line x1="12" y1="15" x2="12" y2="3" />
+          </svg>
+        </button>
       </div>
 
       {/* 凡例 */}
@@ -1184,7 +1186,7 @@ export default function DiagnosisApp() {
         <SwiperSlide><QuestionSlide category={categories[6]} questionNumber={7} score={scores[6]} onScoreChange={(v) => handleScoreChange(6, v)} /></SwiperSlide>
         <SwiperSlide><QuestionSlide category={categories[7]} questionNumber={8} score={scores[7]} onScoreChange={(v) => handleScoreChange(7, v)} /></SwiperSlide>
         <SwiperSlide><Complete onShowResult={handleShowResult} /></SwiperSlide>
-        <SwiperSlide><ResultWheel scores={scores} onNext={handleResultNext} /></SwiperSlide>
+        <SwiperSlide><ResultWheel scores={scores} onNext={handleResultNext} nickname={nickname} /></SwiperSlide>
         <SwiperSlide>
           <AdditionalQuestion
             selectedAreas={selectedAreas}
