@@ -711,12 +711,12 @@ function SeminarPromotion({
         </div>
       </div>
 
-      <p className="text-[#9a9a9a] text-xs mb-6 animate-fade-in-up animate-delay-4">
+      <p className="text-[#9a9a9a] text-xs mb-10 animate-fade-in-up animate-delay-4">
         約2時間 / Zoom開催 / 完全無料
       </p>
 
       {/* ボタンエリア */}
-      <div className="w-full max-w-sm space-y-4 mt-4 animate-fade-in-up animate-delay-4">
+      <div className="w-full max-w-sm space-y-6 mt-6 animate-fade-in-up animate-delay-4">
         {/* メインCTA */}
         <a
           href="/seminar"
@@ -728,14 +728,14 @@ function SeminarPromotion({
         {/* サブCTA - メール講座 */}
         <button
           onClick={onSkip}
-          className="w-full py-3 px-6 border-2 border-[#0d7377] text-[#0d7377] rounded-xl font-medium hover:bg-[#0d7377]/5 transition-colors"
+          className="w-full py-4 px-6 border-2 border-[#0d7377] text-[#0d7377] rounded-xl font-medium hover:bg-[#0d7377]/5 transition-colors"
         >
-          まずはメール講座で最初の30日を始めてみる
+          まずはメール講座で<br />最初の30日を始めてみる
         </button>
       </div>
 
       {/* 戻るリンク */}
-      <div className="mt-8 animate-fade-in-up animate-delay-5">
+      <div className="mt-10 animate-fade-in-up animate-delay-5">
         <button onClick={onBack} className="text-sm text-[#9a9a9a] hover:text-[#0d7377] transition-colors">
           ← 結果に戻る
         </button>
@@ -779,7 +779,7 @@ function NewsletterSignup({
 
       <div className="w-full max-w-sm animate-fade-in-up animate-delay-4">
         {/* メールアドレス入力 */}
-        <div className="mb-6">
+        <div className="mb-10">
           <label className="block text-sm text-[#6b6b6b] mb-3 text-left">
             メールアドレス
           </label>
@@ -804,7 +804,7 @@ function NewsletterSignup({
           {isSubmitting ? "登録中..." : "無料で始める"}
         </button>
 
-        <p className="text-sm text-[#9a9a9a] leading-relaxed mt-6">
+        <p className="text-sm text-[#9a9a9a] leading-relaxed mt-10">
           登録後、配信時間を選べるメールが届きます。
         </p>
       </div>
