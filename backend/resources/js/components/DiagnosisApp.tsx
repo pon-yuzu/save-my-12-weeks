@@ -683,7 +683,7 @@ function SeminarPromotion({
 
       {/* 次回開催日 */}
       {nextSeminar && (
-        <div className="bg-[#0d7377]/10 rounded-lg px-4 py-3 mb-6 animate-fade-in-up animate-delay-2">
+        <div className="bg-[#0d7377]/10 rounded-lg px-4 py-3 animate-fade-in-up animate-delay-2" style={{ marginTop: '16px', marginBottom: '20px' }}>
           <p className="text-xs text-[#0d7377] mb-1">次回開催</p>
           <p className="text-sm text-[#2d2d2d] font-medium">
             {nextSeminar.formatted_schedule}
@@ -716,7 +716,7 @@ function SeminarPromotion({
       </p>
 
       {/* ボタンエリア */}
-      <div className="w-full max-w-sm animate-fade-in-up animate-delay-4" style={{ marginTop: '32px' }}>
+      <div className="w-full max-w-sm animate-fade-in-up animate-delay-4" style={{ marginTop: '20px' }}>
         {/* メインCTA */}
         <a
           href="/seminar"
@@ -729,14 +729,14 @@ function SeminarPromotion({
         <button
           onClick={onSkip}
           className="w-full py-4 px-6 border-2 border-[#0d7377] text-[#0d7377] rounded-xl font-medium hover:bg-[#0d7377]/5 transition-colors"
-          style={{ marginTop: '24px' }}
+          style={{ marginTop: '16px' }}
         >
           まずはメール講座で<br />最初の30日を始めてみる
         </button>
       </div>
 
       {/* 戻るリンク */}
-      <div className="animate-fade-in-up animate-delay-5" style={{ marginTop: '40px' }}>
+      <div className="animate-fade-in-up animate-delay-5" style={{ marginTop: '24px' }}>
         <button onClick={onBack} className="text-sm text-[#9a9a9a] hover:text-[#0d7377] transition-colors">
           ← 結果に戻る
         </button>
@@ -780,7 +780,7 @@ function NewsletterSignup({
 
       <div className="w-full max-w-sm animate-fade-in-up animate-delay-4">
         {/* メールアドレス入力 */}
-        <div style={{ marginBottom: '40px' }}>
+        <div style={{ marginBottom: '24px' }}>
           <label className="block text-sm text-[#6b6b6b] mb-3 text-left">
             メールアドレス
           </label>
@@ -805,7 +805,7 @@ function NewsletterSignup({
           {isSubmitting ? "登録中..." : "無料で始める"}
         </button>
 
-        <p className="text-sm text-[#9a9a9a] leading-relaxed" style={{ marginTop: '40px' }}>
+        <p className="text-sm text-[#9a9a9a] leading-relaxed" style={{ marginTop: '24px' }}>
           登録後、配信時間を選べるメールが届きます。
         </p>
       </div>
