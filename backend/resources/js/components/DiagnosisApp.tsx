@@ -570,8 +570,8 @@ function ResultWheel({ scores, onNext, nickname }: { scores: number[]; onNext: (
 
       <div className="h-4" />
 
-      <button onClick={onNext} className="cta-button animate-pulse-subtle">
-        12週間あったら、どこ変える？→
+      <button onClick={onNext} className="cta-button animate-pulse-subtle" style={{ whiteSpace: 'nowrap' }}>
+        12週間あったら、どこ変える？ →
       </button>
     </div>
   );
@@ -716,7 +716,7 @@ function SeminarPromotion({
       </p>
 
       {/* ボタンエリア */}
-      <div className="w-full max-w-sm mt-8 animate-fade-in-up animate-delay-4">
+      <div className="w-full max-w-sm animate-fade-in-up animate-delay-4" style={{ marginTop: '32px' }}>
         {/* メインCTA */}
         <a
           href="/seminar"
@@ -728,14 +728,15 @@ function SeminarPromotion({
         {/* サブCTA - メール講座 */}
         <button
           onClick={onSkip}
-          className="w-full mt-6 py-4 px-6 border-2 border-[#0d7377] text-[#0d7377] rounded-xl font-medium hover:bg-[#0d7377]/5 transition-colors"
+          className="w-full py-4 px-6 border-2 border-[#0d7377] text-[#0d7377] rounded-xl font-medium hover:bg-[#0d7377]/5 transition-colors"
+          style={{ marginTop: '24px' }}
         >
           まずはメール講座で<br />最初の30日を始めてみる
         </button>
       </div>
 
       {/* 戻るリンク */}
-      <div className="mt-12 animate-fade-in-up animate-delay-5">
+      <div className="animate-fade-in-up animate-delay-5" style={{ marginTop: '40px' }}>
         <button onClick={onBack} className="text-sm text-[#9a9a9a] hover:text-[#0d7377] transition-colors">
           ← 結果に戻る
         </button>
@@ -779,7 +780,7 @@ function NewsletterSignup({
 
       <div className="w-full max-w-sm animate-fade-in-up animate-delay-4">
         {/* メールアドレス入力 */}
-        <div className="mb-10">
+        <div style={{ marginBottom: '40px' }}>
           <label className="block text-sm text-[#6b6b6b] mb-3 text-left">
             メールアドレス
           </label>
@@ -793,7 +794,7 @@ function NewsletterSignup({
         </div>
 
         {error && (
-          <p className="text-red-500 text-sm mb-4">{error}</p>
+          <p className="text-red-500 text-sm" style={{ marginBottom: '16px' }}>{error}</p>
         )}
 
         <button
@@ -804,7 +805,7 @@ function NewsletterSignup({
           {isSubmitting ? "登録中..." : "無料で始める"}
         </button>
 
-        <p className="text-sm text-[#9a9a9a] leading-relaxed mt-10">
+        <p className="text-sm text-[#9a9a9a] leading-relaxed" style={{ marginTop: '40px' }}>
           登録後、配信時間を選べるメールが届きます。
         </p>
       </div>
