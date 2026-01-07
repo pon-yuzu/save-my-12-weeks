@@ -629,13 +629,34 @@ function SeminarCTA({ selectedAreas, scores }: { selectedAreas: string[]; scores
       const canvas = await html2canvas(wheelRef.current, {
         backgroundColor: "#faf8f5",
         scale: 2,
+        useCORS: true,
+        allowTaint: true,
+        logging: false,
       });
+      const dataUrl = canvas.toDataURL("image/png");
+
+      // モバイルブラウザ対応：Blob経由でダウンロード
+      if (navigator.share && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+        try {
+          const blob = await (await fetch(dataUrl)).blob();
+          const file = new File([blob], "life-balance-wheel.png", { type: "image/png" });
+          await navigator.share({ files: [file] });
+          return;
+        } catch {
+          // シェアAPIが失敗した場合はフォールバック
+        }
+      }
+
+      // デスクトップまたはフォールバック
       const link = document.createElement("a");
       link.download = "life-balance-wheel.png";
-      link.href = canvas.toDataURL("image/png");
+      link.href = dataUrl;
+      document.body.appendChild(link);
       link.click();
+      document.body.removeChild(link);
     } catch (error) {
       console.error("保存に失敗しました", error);
+      alert("画像の保存に失敗しました。スクリーンショットをお試しください。");
     }
   };
 
@@ -762,7 +783,7 @@ export default function DiagnosisApp() {
   }, [swiperInstance]);
 
   return (
-    <div className="h-screen w-screen relative">
+    <div className="h-[100dvh] w-screen relative" style={{ height: '100dvh', minHeight: '-webkit-fill-available' }}>
       {/* Background */}
       <div className="mesh-bg" />
       <div className="noise-overlay" />
@@ -784,14 +805,19 @@ export default function DiagnosisApp() {
         pagination={false}
         mousewheel={{
           forceToAxis: true,
+          sensitivity: 1,
         }}
         speed={500}
         spaceBetween={0}
         slidesPerView={1}
-        noSwipingSelector="input[type='range']"
+        noSwipingSelector="input, textarea, button"
         touchStartPreventDefault={false}
-        resistanceRatio={0}
-        touchReleaseOnEdges={false}
+        preventInteractionOnTransition={true}
+        resistanceRatio={0.85}
+        touchReleaseOnEdges={true}
+        threshold={10}
+        touchAngle={45}
+        passiveListeners={true}
         className="h-full w-full pb-[100px]"
         onSwiper={setSwiperInstance}
         onSlideChange={(swiper) => {
